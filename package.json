@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env PORT=10888 react-scripts start",
-    "build": "react-scripts build"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "proxy": "ssh -vnNT -R 3000:localhost:4500 forge@dev.ezavalishin.ru"
   },
   "keywords": [],
   "author": "",
