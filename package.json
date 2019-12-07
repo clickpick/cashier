@@ -6,7 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "proxy": "ssh -vnNT -R 3000:localhost:4500 forge@dev.ezavalishin.ru"
+    "proxy": "ssh -vnNT -R 3000:localhost:4600 forge@dev.ezavalishin.ru"
   },
   "keywords": [],
   "author": "",
@@ -31,5 +31,15 @@
     "react-redux": "^7.1.3",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0"
+  },
+  "browserslist": {
+    "production": [
+      "android >= 4.4",
+      "iOS >= 9"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 safari version"
+    ]
   }
 }

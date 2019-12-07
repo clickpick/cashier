@@ -1,0 +1,17 @@
+.Spinner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.Spinner__SpinnerComponent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+
+    width: 100px;
+    height: 100px;
+}
