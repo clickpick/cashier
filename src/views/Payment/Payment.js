@@ -1,39 +1,72 @@
-import React, { useCallback } from 'react';
-import { string, func } from 'prop-types';
+import React, { useCallback, useEffect } from 'react';
+import { string } from 'prop-types';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getPaymentPanel } from 'reducers/payment-reducer';
-import { setPanel } from 'actions/payment-actions';
-import useNavigation from 'hooks/use-navigation';
+import { getPaymentState } from 'reducers/payment-reducer';
+import { goForward, goBack } from 'actions/payment-actions';
+
+import connect from '@vkontakte/vk-connect';
 
 import { ConfigProvider, View } from '@vkontakte/vkui';
 
 import Home from 'panels/Home';
 
-const Main = ({ id }) => {
-    const activePanel = useSelector(getPaymentPanel);
-    // const [activePanel, history, goForward, goBack] = useNavigation('home');
+import * as PANELS from 'constants/panels';
+
+const callback = (p) => window.history.pushState({ panel: p }, p);
+
+const Payment = ({ id }) => {
+    const viewState = useSelector(getPaymentState);
 
     const dispatch = useDispatch();
 
-    const onPanelChange = useCallback((e) => dispatch(setPanel(e.currentTarget.dataset.panel)), [dispatch]);
+    const go = useCallback((e) => {
+        dispatch(
+            goForward(
+                e.currentTarget.dataset.panel,
+                callback
+            )
+        );
+    }, [dispatch]);
+
+    const back = useCallback(() => dispatch(goBack), [dispatch]);
+
+    useEffect(() => {
+        function handlePopState(e) {
+            e.preventDefault();
+
+            if (e.state) {
+                if (e.state.panel === 'home') {
+                    connect.send('VKWebAppDisableSwipeBack');
+                }
+            } else {
+                connect.send('VKWebAppDisableSwipeBack');
+                window.history.pushState({ panel: 'home' }, 'home');
+            }
+
+            back();
+        }
+
+        window.addEventListener('popstate', handlePopState);
+        window.history.pushState({ panel: 'home' }, 'home');
+
+        return () => {
+            window.history.pushState(null, '');
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, [back]);
 
     return (
         <ConfigProvider isWebView={true}>
-            <View
-                id={id}
-                activePanel={activePanel}>
-                {/* // history={history}
-                // onSwipeBack={goBack}> */}
-                <Home id="home" />
+            <View id={id} {...viewState} onSwipeBack={back}>
+                <Home id={PANELS.HOME} />
             </View>
         </ConfigProvider>
     );
 };
 
-Main.propTypes = {
-    id: string.isRequired,
-    goOrder: func.isRequired
+Payment.propTypes = {
+    id: string.isRequired
 };
 
-export default Main;
+export default Payment;

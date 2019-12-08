@@ -4,7 +4,8 @@ import { HOME } from 'constants/panels';
 export const STORY_STATE = LOADER;
 
 export const PAYMENT_STATE = {
-    panel: HOME
+    activePanel: HOME,
+    history: [HOME]
 };
 
 export const INITIAL_STATE = {

@@ -6,7 +6,8 @@ export function paymentReducer(state = PAYMENT_STATE, action) {
         case types.SET_PAYMENT_PANEL:
             return {
                 ...state,
-                panel: action.nextPanel
+                activePanel: action.nextPanel,
+                history: action.nextHistory
             };
 
         default:
@@ -14,4 +15,7 @@ export function paymentReducer(state = PAYMENT_STATE, action) {
     }
 }
 
-export const getPaymentPanel = (state) => state.payment.panel;
+export const getPaymentState = (state) => ({
+    activePanel: state.payment.activePanel,
+    history: state.payment.history
+});
