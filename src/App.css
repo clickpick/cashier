@@ -45,3 +45,11 @@ a {
 .PanelHeader * {
     box-sizing: unset;
 }
+
+.TabbarItem svg {
+    fill: var(--tabbar_inactive_icon);
+}
+
+.TabbarItem--selected svg {
+    fill: var(--tabbar_active_icon);
+}

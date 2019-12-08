@@ -9,6 +9,10 @@ import { setStory } from 'actions/story-actions';
 import * as VIEWS from 'constants/views';
 import { Epic, Tabbar, TabbarItem } from '@vkontakte/vkui';
 
+import { ReactComponent as IconStatistics } from 'svg/statistics.svg';
+import { ReactComponent as IconPayment } from 'svg/payment.svg';
+import { ReactComponent as IconSettings } from 'svg/settings.svg';
+
 import Payment from 'views/Payment';
 import Settings from 'views/Settings';
 import Loader from 'views/Loader';
@@ -25,17 +29,20 @@ const App = () => {
 			<TabbarItem
 				selected={activeStory === VIEWS.LOADER}
 				data-story={VIEWS.LOADER}
-				text="Лоадер"
+				children={<IconStatistics />}
+				text="Статистика"
 				onClick={onStoryChange} />
 			<TabbarItem
 				selected={activeStory === VIEWS.PAYMENT}
 				data-story={VIEWS.PAYMENT}
-				text="Main"
+				children={<IconPayment />}
+				text="Выставить счёт"
 				onClick={onStoryChange} />
 			<TabbarItem
 				selected={activeStory === VIEWS.SETTINGS}
 				data-story={VIEWS.SETTINGS}
-				text="Settings"
+				children={<IconSettings />}
+				text="Настройки"
 				onClick={onStoryChange} />
 		</Tabbar>,
 		[activeStory, onStoryChange]);
