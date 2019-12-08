@@ -1,0 +1,1 @@
+export const SET_STORY = 'set-story';

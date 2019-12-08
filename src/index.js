@@ -2,7 +2,13 @@ import 'core-js/features/map';
 import 'core-js/features/set';
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import connect from '@vkontakte/vk-connect';
+
+import { Provider } from 'react-redux';
+import configureStore from 'store/configureStore';
+import { INITIAL_STATE } from 'constants/store';
+
 import App from './App';
 // import registerServiceWorker from './sw';
 
@@ -15,4 +21,9 @@ connect.send('VKWebAppInit');
 // Подробнее про сервис воркеры можно почитать тут — https://vk.cc/8MHpmT
 // registerServiceWorker();
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={configureStore(INITIAL_STATE)}>
+        <App />
+    </Provider>,
+    document.getElementById('root')
+);
