@@ -8,7 +8,12 @@ export const PAYMENT_STATE = {
     history: [HOME]
 };
 
+export const SETTINGS_STATE = {
+    activeTab: 'tab'
+};
+
 export const INITIAL_STATE = {
     story: STORY_STATE,
-    payment: PAYMENT_STATE
+    payment: PAYMENT_STATE,
+    settings: SETTINGS_STATE
 };

@@ -10,6 +10,7 @@ import * as VIEWS from 'constants/views';
 import { Epic, Tabbar, TabbarItem } from '@vkontakte/vkui';
 
 import Payment from 'views/Payment';
+import Settings from 'views/Settings';
 import Loader from 'views/Loader';
 
 const App = () => {
@@ -31,12 +32,18 @@ const App = () => {
 				data-story={VIEWS.PAYMENT}
 				text="Main"
 				onClick={onStoryChange} />
+			<TabbarItem
+				selected={activeStory === VIEWS.SETTINGS}
+				data-story={VIEWS.SETTINGS}
+				text="Settings"
+				onClick={onStoryChange} />
 		</Tabbar>,
 		[activeStory, onStoryChange]);
 
 	return (
 		<Epic activeStory={activeStory} tabbar={tabbar}>
 			<Payment id={VIEWS.PAYMENT} />
+			<Settings id={VIEWS.SETTINGS} />
 			<Loader id={VIEWS.LOADER} />
 		</Epic>
 	);
