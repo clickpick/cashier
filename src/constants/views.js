@@ -1,2 +1,2 @@
 export const LOADER = 'loader';
-export const MAIN = 'main';
+export const PAYMENT = 'payment';
