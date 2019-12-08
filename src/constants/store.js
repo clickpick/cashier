@@ -1,7 +1,7 @@
-import { LOADER } from 'constants/views';
+import { PAYMENT } from 'constants/views';
 import { HOME } from 'constants/panels';
 
-export const STORY_STATE = LOADER;
+export const STORY_STATE = PAYMENT;
 
 export const PAYMENT_STATE = {
     activePanel: HOME,
@@ -10,6 +10,13 @@ export const PAYMENT_STATE = {
 
 export const SETTINGS_STATE = {
     activeTab: 'tab'
+};
+
+export const USER_STATE = {
+    loading: false,
+    ownedGroups: [],
+    cashiedGroups: [],
+    error: false
 };
 
 export const INITIAL_STATE = {
