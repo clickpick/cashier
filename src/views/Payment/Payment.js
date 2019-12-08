@@ -13,7 +13,13 @@ import Home from 'panels/Home';
 
 import * as PANELS from 'constants/panels';
 
-const callback = (p) => window.history.pushState({ panel: p }, p);
+const callback = (prevPanel, nextPanel) => {
+    if (prevPanel === PANELS.HOME) {
+        connect.send('VKWebAppEnableSwipeBack');
+    }
+
+    window.history.pushState({ panel: nextPanel }, nextPanel);
+};
 
 const Payment = ({ id }) => {
     const viewState = useSelector(getPaymentState);

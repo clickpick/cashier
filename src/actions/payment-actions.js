@@ -7,18 +7,12 @@ const setPanel = (nextPanel, nextHistory) => ({
 });
 
 const goForward = (nextPanel, callback) => (dispatch, getState) => {
-    const { payment: { history } } = getState();
+    const { payment: { activePanel, history } } = getState();
 
     const nextHistory = [...history, nextPanel];
-
-    // if (activePanel === initialActivePanel) {
-    //     connect.send('VKWebAppEnableSwipeBack');
-    // }
-
-    // window.history.pushState({ panel: nextPanel }, nextPanel);
     
     dispatch(setPanel(nextPanel, nextHistory));
-    callback();
+    callback(activePanel, nextPanel);
 };
 
 const goBack = (dispatch, getState) => {
