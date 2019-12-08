@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 
 import connect from '@vkontakte/vk-connect';
 
+import '@vkontakte/vkui/dist/vkui.css';
+
 import { Provider } from 'react-redux';
 import configureStore from 'store/configureStore';
 import { INITIAL_STATE } from 'constants/store';

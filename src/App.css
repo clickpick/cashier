@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-white: #fff;
+    --color-black: #000;
+    --color-primary: #007AFF;
+    --color-primary-rgb: 0, 122, 255;
+    --color-gray: #ABB2C6;
+    --color-red: #FF3B30;
+    --color-green: #27AE60;
+
+    --header_background: rgba(0, 0, 0, 0);
+    --background_page: var(--color-white);
+    --header_text: var(--color-primary);
+    --header_tint: var(--color-primary);
+    --text_secondary: var(--color-gray);
+    --tabbar_inactive_icon: var(--color-gray);
+    --tabbar_active_icon: var(--color-primary);
+
+    --font-size-11: 11px;
+    --font-size-13: 13px;
+    --font-size-15: 15px;
+    --font-size-17: 17px;
+    --font-size-28: 28px;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+}
+
+button {
+    outline: none;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.PanelHeader,
+.PanelHeader * {
+    box-sizing: unset;
+}

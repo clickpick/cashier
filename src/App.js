@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 
-import '@vkontakte/vkui/dist/vkui.css';
+import './App.css';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getStory } from 'reducers/story-reducer';
@@ -20,7 +20,7 @@ const App = () => {
 	const onStoryChange = useCallback((e) => dispatch(setStory(e.currentTarget.dataset.story)), [dispatch]);
 
 	const tabbar = useMemo(() =>
-		<Tabbar>
+		<Tabbar shadow={false}>
 			<TabbarItem
 				selected={activeStory === VIEWS.LOADER}
 				data-story={VIEWS.LOADER}
