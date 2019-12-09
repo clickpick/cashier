@@ -6,7 +6,7 @@
     transform: translate3d(-50%, 0, 0);
 
     width: 100%;
-    max-height: 94%;
+    max-height: calc(100vh - 44px - var(--safe-area-inset-top));
 
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
