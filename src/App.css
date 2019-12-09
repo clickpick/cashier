@@ -30,6 +30,21 @@
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
+
+    /**
+     * Button Component
+     */
+    --button-default_background: var(--color-white);
+    --button-default_color: var(--color-primary);
+
+    --button-secondary_background: rgba(var(--color-primary-rgb), 0.1);
+    --button-secondary_color: var(--color-primary);
+
+    --button-primary_background: var(--color-primary);
+    --button-primary_color: var(--color-white);
+
+    --button_backlight: 0px 10px 30px rgba(var(--color-primary-rgb), 0.5);
+    --button_svg-fill: var(--color-white);
 }
 
 button {
