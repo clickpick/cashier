@@ -1,0 +1,118 @@
+.Dialog {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    z-index: 110;
+    transform: translate3d(-50%, 0, 0);
+
+    width: 100%;
+    max-height: 94%;
+
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+
+    background-color: var(--popup-dialog-background);
+
+    overflow-y: hidden;
+    touch-action: pan-y;
+}
+
+.Dialog > * {
+    user-select: none
+}
+
+@keyframes dialog-slide-down-enter {
+    from {
+        transform: translate3d(-50%, 100%, 0);
+    }
+}
+
+.Dialog--slide-down-enter {
+    animation: dialog-slide-down-enter 150ms ease-out;
+}
+
+@keyframes dialog-slide-down-leave {
+    to {
+        transform: translate3d(-50%, 100%, 0);
+    }
+}
+
+.Dialog--slide-down-leave {
+    animation: dialog-slide-down-leave 150ms linear;
+}
+
+.Dialog__wrapper {
+    max-height: 94vh;
+    padding-top: 30px;
+    padding-right: 20px;
+    padding-bottom: calc(30px + var(--safe-area-inset-bottom));
+    padding-left: 20px;
+
+    overflow-y: auto;
+}
+
+.Dialog__status {
+    position: relative;
+
+    width: 50px;
+    height: 50px;
+    margin-right: auto;
+    margin-bottom: 20px;
+    margin-left: auto;
+}
+
+.Dialog__title {
+    margin-bottom: 8px;
+    font-size: var(--font-size-16);
+    text-align: center;
+}
+
+.Dialog--info .Dialog__title {
+    color: var(--color-primary);
+}
+
+.Dialog--success .Dialog__title {
+    color: var(--color-green);
+}
+
+.Dialog--danger .Dialog__title {
+    color: var(--color-red);
+}
+
+.Dialog__message {
+    padding-right: 30px;
+    padding-left: 30px;
+
+    font-size: var(--font-size-14);
+    color: var(--color-dark-gray);
+    text-align: center;
+}
+
+.Dialog__message img {
+    max-height: 380px;
+
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;    
+    user-select: none; 
+}
+
+.Dialog__message a {
+    color: var(--color-blue);
+    text-decoration: none;
+}
+
+.Dialog__actions {
+    display: flex;
+    margin-top: 50px;
+}
+
+.Dialog__action {
+    margin-right: 20px !important;
+    margin-left: 0 !important;
+}
+
+.Dialog__action:last-child {
+    margin-right: 0 !important;
+}

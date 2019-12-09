@@ -45,6 +45,11 @@
 
     --button_backlight: 0px 10px 30px rgba(var(--color-primary-rgb), 0.5);
     --button_svg-fill: var(--color-white);
+
+    /**
+     * Popup Component
+     */
+    --popup-dialog-background: var(--color-white);
 }
 
 button {
