@@ -1,3 +1,25 @@
+.Home .Panel__in {
+    display: flex;
+    align-items: center;
+}
+
 .Home__Cell--add-group {
     --text_primary: var(--color-primary);
+}
+
+.Home__form {
+    width: 100%;
+    padding-right: 40px;
+    padding-left: 40px;
+}
+
+.Home__Input {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 360px) {
+    .Home__form {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
 }

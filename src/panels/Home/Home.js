@@ -15,6 +15,8 @@ import Icon16Dropdown from '@vkontakte/icons/dist/16/dropdown';
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 import Icon24Done from '@vkontakte/icons/dist/24/done';
 
+import Input from 'components/Input';
+import Button from 'components/Button';
 import AddGroup from 'components/AddGroup';
 
 const MODES = {
@@ -24,12 +26,14 @@ const MODES = {
 
 const Home = ({ id }) => {
     const groups = useSelector(getUserGroups);
-    const selectedGroup = useSelector(getUserSelectedGroup);    
+    const selectedGroup = useSelector(getUserSelectedGroup);
 
     const dispatch = useDispatch();
 
     const [contextOpened, setContextOpened] = useState(false);
     const [showAddGroup, setShowAddGroup] = useState(false);
+
+    const [cash, setCash] = useState('');
 
     const hasGroups = useMemo(() => Array.isArray(groups) && groups.length > 0, [groups]);
 
@@ -76,6 +80,12 @@ const Home = ({ id }) => {
 
     const onAttachGroup = useCallback((groupId, accessToken) => dispatch(fetchAttachGroup(groupId, accessToken)), [dispatch]);
 
+    const handleCashChange = useCallback((e) => setCash(String(e.currentTarget.value.replace(/\s/g, ''))), []);
+
+    const handleSubmit = useCallback((e) => {
+        e.preventDefault();
+    }, []);
+
     return (
         <Panel id={id} className="Home">
             <PanelHeader noShadow={true}>
@@ -97,6 +107,26 @@ const Home = ({ id }) => {
                         onClick={select} />
                 </List>
             </HeaderContext>
+
+            <form className="Home__form" onSubmit={handleSubmit}>
+                <Input
+                    className="Home__Input"
+                    name="cash"
+                    top="Выставить счёт"
+                    placeholder="300"
+                    value={cash}
+                    postfix=" ₽"
+                    onChange={handleCashChange} />
+                <Button
+                    className="Home__Button"
+                    type="submit"
+                    theme="primary"
+                    size="medium"
+                    children="Выставить QR-счёт"
+                    disabled={!Boolean(cash)}
+                    full
+                    backlight />
+            </form>
 
             <AddGroup
                 visible={showAddGroup}
