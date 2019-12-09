@@ -9,12 +9,17 @@ export function userReducer(state = USER_STATE, action) {
                 loading: true
             };
 
-        case types.FETCH_GROUPS_SUCCESS:            
+        case types.FETCH_GROUPS_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 ownedGroups: action.ownedGroups,
-                cashiedGroups: action.cashiedGroups
+                cashiedGroups: action.cashiedGroups,
+                selectedGroup: (action.ownedGroups.length > 0)
+                    ? action.ownedGroups[0]
+                    : (action.cashiedGroups.length > 0)
+                        ? action.cashiedGroups[0]
+                        : null
             };
 
         case types.FETCH_GROUPS_ERROR:
@@ -24,6 +29,13 @@ export function userReducer(state = USER_STATE, action) {
                 error: action.error
             };
 
+        case types.ATTACH_OWNED_GROUP:
+            return {
+                ...state,
+                ownedGroups: state.ownedGroups.concat(action.entities),
+                selectedGroup: !state.selectedGroup && action.entities
+            };
+
         default:
             return state;
     }
@@ -31,3 +43,13 @@ export function userReducer(state = USER_STATE, action) {
 
 export const getUserState = (state) => state.user;
 export const getUserLoading = (state) => state.user.loading;
+export const getUserGroups = (state) => {
+    const { ownedGroups, cashiedGroups } = state.user;
+
+    if (Array.isArray(ownedGroups) && Array.isArray(cashiedGroups)) {
+        return ownedGroups.concat(cashiedGroups);
+    }
+
+    return null;
+}
+export const getUserSelectedGroup = (state) => state.user.selectedGroup;

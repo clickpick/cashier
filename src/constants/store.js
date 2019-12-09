@@ -16,6 +16,7 @@ export const USER_STATE = {
     loading: false,
     ownedGroups: null,
     cashiedGroups: null,
+    selectedGroup: null,
     error: false
 };
 

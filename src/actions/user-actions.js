@@ -16,6 +16,11 @@ const fetchGroupsError = (error) => ({
     error
 });
 
+const attachGroup = (entities) => ({
+    type: types.ATTACH_OWNED_GROUP,
+    entities
+});
+
 const fetchGroups = async (dispatch) => {    
     dispatch(fetchGroupsLoad);
 
@@ -36,4 +41,12 @@ const fetchGroups = async (dispatch) => {
     }
 };
 
-export { fetchGroups };
+const fetchAttachGroup = (groupId, accessToken) => async (dispatch) => {    
+    try {
+        const group = await API.attachGroup(groupId, accessToken);
+        
+        dispatch(attachGroup(group));
+    } catch (e) {}
+};
+
+export { fetchGroups, fetchAttachGroup };

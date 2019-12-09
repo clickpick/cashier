@@ -22,6 +22,20 @@ const post = (urn, body) => instance.post(urn, body);
 class API {
     getOwnedGroups = async () => await get('/vk-user/owned-groups');
     getCashiedGroups = async () => await get('/vk-user/cashied-groups');
+
+    attachGroup = async (group_id, group_access_token) => {
+        if (!group_id) {
+            throw new Error('Bad group id');
+        }
+
+        if (!group_access_token) {
+            throw new Error('Bad group access token');
+        }
+
+        const { data: { data } } = await post('/vk-user/attach-group', { group_id, group_access_token });
+
+        return data;
+    }
 }
 
 export default new API();
