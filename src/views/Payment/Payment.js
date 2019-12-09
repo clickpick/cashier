@@ -80,11 +80,10 @@ const Payment = ({ id }) => {
     }, [back]);
 
     useEffect(() => {
-        if (!loading) {
+        if (!loading && Array.isArray(ownedGroups) && Array.isArray(cashiedGroups)) {
             setPopout(null);
 
-            if (Array.isArray(ownedGroups) && Array.isArray(cashiedGroups) &&
-                ownedGroups.length === 0 && cashiedGroups.length === 0) {
+            if (ownedGroups.length === 0 && cashiedGroups.length === 0) {
                 setShowAddGroup(true);
             }
         }
