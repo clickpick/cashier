@@ -1,10 +1,12 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect } from 'react';
 
 import './App.css';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getStory } from 'reducers/story-reducer';
 import { setStory } from 'actions/story-actions';
+
+import { fetchGroups } from 'actions/user-actions';
 
 import * as VIEWS from 'constants/views';
 import { Epic, Tabbar, TabbarItem } from '@vkontakte/vkui';
@@ -15,7 +17,6 @@ import { ReactComponent as IconSettings } from 'svg/settings.svg';
 
 import Payment from 'views/Payment';
 import Settings from 'views/Settings';
-import Loader from 'views/Loader';
 
 const App = () => {
 	const activeStory = useSelector(getStory);
@@ -47,11 +48,14 @@ const App = () => {
 		</Tabbar>,
 		[activeStory, onStoryChange]);
 
+	useEffect(() => {
+		dispatch(fetchGroups);
+	}, [dispatch]);
+
 	return (
 		<Epic activeStory={activeStory} tabbar={tabbar}>
 			<Payment id={VIEWS.PAYMENT} />
 			<Settings id={VIEWS.SETTINGS} />
-			<Loader id={VIEWS.LOADER} />
 		</Epic>
 	);
 }
