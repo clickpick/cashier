@@ -62,7 +62,9 @@ a {
 }
 
 .PanelHeader,
-.PanelHeader * {
+.PanelHeader *,
+.Cell,
+.Cell * {
     box-sizing: unset;
 }
 
