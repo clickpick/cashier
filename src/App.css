@@ -20,6 +20,7 @@
     --text_secondary: var(--color-gray);
     --tabbar_inactive_icon: var(--color-gray);
     --tabbar_active_icon: var(--color-primary);
+    --content_tint_background: var(--color-white);
 
     --font-size-11: 11px;
     --font-size-13: 13px;
