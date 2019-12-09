@@ -51,7 +51,11 @@ const fetchAttachGroup = (groupId, accessToken) => async (dispatch) => {
         const group = await API.attachGroup(groupId, accessToken);
         
         dispatch(attachGroup(group));
-    } catch (e) {}
+
+        return true;
+    } catch (e) {
+        return false;
+    }
 };
 
 const selectGroup = (group) => (dispatch) => dispatch(setSelectedGroup(group));
