@@ -21,6 +21,11 @@ const attachGroup = (entities) => ({
     entities
 });
 
+const setSelectedGroup = (entities) => ({
+    type: types.SET_SELECTED_GROUP,
+    entities
+});
+
 const fetchGroups = async (dispatch) => {    
     dispatch(fetchGroupsLoad);
 
@@ -49,4 +54,6 @@ const fetchAttachGroup = (groupId, accessToken) => async (dispatch) => {
     } catch (e) {}
 };
 
-export { fetchGroups, fetchAttachGroup };
+const selectGroup = (group) => (dispatch) => dispatch(setSelectedGroup(group));
+
+export { fetchGroups, fetchAttachGroup, selectGroup };

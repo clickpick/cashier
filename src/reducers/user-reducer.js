@@ -36,6 +36,12 @@ export function userReducer(state = USER_STATE, action) {
                 selectedGroup: !state.selectedGroup && action.entities
             };
 
+        case types.SET_SELECTED_GROUP:            
+            return {
+                ...state,
+                selectedGroup: action.entities
+            };
+
         default:
             return state;
     }
