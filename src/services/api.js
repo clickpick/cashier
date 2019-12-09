@@ -20,8 +20,8 @@ const get = (urn) => instance.get(urn);
 const post = (urn, body) => instance.post(urn, body);
 
 class API {
-    ownedGroups = async () => await get('/vk-user/owned-groups');
-    cashiedGroups = async () => await get('/vk-user/cashied-groups');
+    getOwnedGroups = async () => await get('/vk-user/owned-groups');
+    getCashiedGroups = async () => await get('/vk-user/cashied-groups');
 }
 
 export default new API();

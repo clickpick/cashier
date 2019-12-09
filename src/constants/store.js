@@ -14,8 +14,8 @@ export const SETTINGS_STATE = {
 
 export const USER_STATE = {
     loading: false,
-    ownedGroups: [],
-    cashiedGroups: [],
+    ownedGroups: null,
+    cashiedGroups: null,
     error: false
 };
 
