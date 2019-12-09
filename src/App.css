@@ -15,7 +15,7 @@
 
     --header_background: rgba(0, 0, 0, 0);
     --background_page: var(--color-white);
-    --header_text: var(--color-primary);
+    --header_text: var(--color-black);
     --header_tint: var(--color-primary);
     --text_secondary: var(--color-gray);
     --tabbar_inactive_icon: var(--color-gray);
