@@ -4,13 +4,15 @@ import classNames from 'classnames';
 
 import './Title.css';
 
-const Title = ({ className, type, children, ...restProps }) =>
+const Title = ({ className, type, children, hint, ...restProps }) =>
     <h1
         className={classNames(className, 'Title', {
             [`Title--${type}`]: type
         })}
-        children={children}
-        {...restProps} />;
+        {...restProps}>
+        {children}
+        {(hint) && <small className="Title__hint" children={hint} />}
+    </h1>;
 
 Title.propTypes = {
     className: string,
