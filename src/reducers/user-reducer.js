@@ -13,12 +13,12 @@ export function userReducer(state = USER_STATE, action) {
             return {
                 ...state,
                 loading: false,
-                ownedGroups: action.ownedGroups,
-                cashiedGroups: action.cashiedGroups,
+                ownedGroups: action.ownedGroups.map((group) => ({ ...group, owned: true })),
+                cashiedGroups: action.cashiedGroups.map((group) => ({ ...group, owned: false })),
                 selectedGroup: (action.ownedGroups.length > 0)
-                    ? action.ownedGroups[0]
+                    ? { ...action.ownedGroups[0], owned: true }
                     : (action.cashiedGroups.length > 0)
-                        ? action.cashiedGroups[0]
+                        ? { ...action.cashiedGroups[0], owned: false }
                         : null
             };
 
@@ -30,10 +30,12 @@ export function userReducer(state = USER_STATE, action) {
             };
 
         case types.ATTACH_OWNED_GROUP:
+            const newOwnedGroups = { ...action.entities, owned: true };
+
             return {
                 ...state,
-                ownedGroups: state.ownedGroups.concat(action.entities),
-                selectedGroup: action.entities
+                ownedGroups: state.ownedGroups.concat(newOwnedGroups),
+                selectedGroup: newOwnedGroups
             };
 
         case types.SET_SELECTED_GROUP:            

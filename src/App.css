@@ -78,3 +78,7 @@ a {
 .TabbarItem--selected svg {
     fill: var(--tabbar_active_icon);
 }
+
+.TabbarItem--disabled {
+    opacity: 0.3;
+}
