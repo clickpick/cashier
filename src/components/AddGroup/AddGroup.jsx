@@ -11,16 +11,19 @@ import Popup from 'components/Popup';
 import Title from 'components/Title';
 import { Cell, Avatar } from '@vkontakte/vkui';
 
+const POPUPS = {
+    ACCESS_TOKEN: 'access-token',
+    OWNED_GROUPS: 'owned-groups',
+    ERROR: 'error'
+};
+
 const AddGroup = ({ visible, disabled, selectedGroups, attachGroup, onClose }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const actions = useRef(undefined);
 
-    const [showAccessPopup, setShowAccessPopup] = useState(visible);
-    const [showError, setShowError] = useState(false);
-
+    const [showPopup, setShowPopup] = useState(null);
     const [groups, setGroups] = useState([]);
-    const [showOwnedGroupsList, setShowOwnedGroupsList] = useState(false);
 
     const accessActions = useMemo(() => ([{
         theme: 'primary',
@@ -60,21 +63,16 @@ const AddGroup = ({ visible, disabled, selectedGroups, attachGroup, onClose }) =
                 }
 
                 setGroups(groups);
-                setShowAccessPopup(false);
-                setTimeout(() => setShowOwnedGroupsList(true), 75);
+                setShowPopup(POPUPS.OWNED_GROUPS);
                 setLoading(false);
             } catch (e) {
                 setError('Для дальнейшей работы предоставьте доступ к вашим сообществам.');
-                setShowAccessPopup(false);
-                setTimeout(() => setShowError(true), 75);
+                setShowPopup(POPUPS.ERROR);
             }
         }
     }]), [loading, selectedGroups]);
 
-    const reshowGroups = useCallback(() => {
-        setShowError(false);
-        setTimeout(() => setShowOwnedGroupsList(true), 75);
-    }, []);
+    const reshowGroups = useCallback(() => setShowPopup(POPUPS.OWNED_GROUPS), []);
 
     const onGroupClick = useCallback(async (e) => {
         const { groupId } = e.currentTarget.dataset;
@@ -97,8 +95,7 @@ const AddGroup = ({ visible, disabled, selectedGroups, attachGroup, onClose }) =
             }];
 
             setError('Для добавления сообщества, мы должны получиться доступ к нему.');
-            setShowOwnedGroupsList(false);
-            setTimeout(() => setShowError(true), 75);
+            setShowPopup(POPUPS.ERROR);
         }
     }, [attachGroup, actions, reshowGroups]);
 
@@ -111,43 +108,29 @@ const AddGroup = ({ visible, disabled, selectedGroups, attachGroup, onClose }) =
             description={group.activity}
             onClick={onGroupClick} />, [onGroupClick]);
 
-    useEffect(() => {
-        setShowAccessPopup(visible);
-
-        if (!visible) {
-            if (showAccessPopup) {
-                setShowAccessPopup(false);
-            }
-            if (showError) {
-                setShowError(false);
-            }
-            if (showOwnedGroupsList) {
-                setShowOwnedGroupsList(false);
-            }
-        }
-    }, [visible, showAccessPopup, showError, showOwnedGroupsList]);
+    useEffect(() => setShowPopup((visible) ? POPUPS.ACCESS_TOKEN : null), [visible]);
 
     return (
         <PopupContainer>
             <Popup
-                visible={showAccessPopup}
+                visible={showPopup === POPUPS.ACCESS_TOKEN}
                 disabled={disabled}
                 actions={accessActions}
-                onClose={(showAccessPopup) ? onClose : undefined}>
+                onClose={(showPopup === POPUPS.ACCESS_TOKEN) ? onClose : undefined}>
                 <Title>Разрешите<br />получить нам доступ к Вашим группам</Title>
             </Popup>
             <Popup
-                visible={showOwnedGroupsList}
+                visible={showPopup === POPUPS.OWNED_GROUPS}
                 disabled={disabled}
-                onClose={(showOwnedGroupsList) ? onClose : undefined}>
+                onClose={(showPopup === POPUPS.OWNED_GROUPS) ? onClose : undefined}>
                 <Title>Выберите нужное<br />сообщество</Title>
                 {groups.map(renderGroup)}
             </Popup>
             <Popup
-                visible={showError}
+                visible={showPopup === POPUPS.ERROR}
                 disabled={disabled}
                 actions={actions.current}
-                onClose={(showError) ? onClose : undefined}>
+                onClose={(showPopup === POPUPS.ERROR) ? onClose : undefined}>
                 <Title>Упс... Ошибка</Title>
                 <p className="AddGroup__message" children={error} />
             </Popup>
