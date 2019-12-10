@@ -36,6 +36,20 @@ class API {
 
         return data;
     }
+
+    makeOrder = async (group_id, value) => {
+        if (!group_id) {
+            throw new Error('Bad group id');
+        }
+
+        if (!value) {
+            throw new Error('Bad value');
+        }
+
+        const { data: { data } } = await post('/vk-user/make-order', { group_id, value });
+
+        return data;
+    }
 }
 
 export default new API();

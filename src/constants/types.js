@@ -9,3 +9,5 @@ export const FETCH_GROUPS_SUCCESS = 'fetch-groups-success';
 export const FETCH_GROUPS_ERROR = 'fetch-groups-error';
 export const ATTACH_OWNED_GROUP = 'attach-owned-group';
 export const SET_SELECTED_GROUP = 'set-selected-group';
+
+export const SET_ACTIVE_ORDER = 'set-active-order';

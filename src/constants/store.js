@@ -20,8 +20,12 @@ export const USER_STATE = {
     error: false
 };
 
+export const ACTIVE_ORDER = null;
+
 export const INITIAL_STATE = {
     story: STORY_STATE,
     payment: PAYMENT_STATE,
-    settings: SETTINGS_STATE
+    settings: SETTINGS_STATE,
+    user: USER_STATE,
+    activeOrder: ACTIVE_ORDER
 };
