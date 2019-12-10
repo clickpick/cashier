@@ -78,7 +78,13 @@ const Home = ({ id }) => {
             description={group.activity}
             onClick={select} />, [selectedGroup, select]);
 
-    const onAttachGroup = useCallback((groupId, accessToken) => dispatch(fetchAttachGroup(groupId, accessToken)), [dispatch]);
+    const onAttachGroup = useCallback((groupId, accessToken) => {
+        const result = dispatch(fetchAttachGroup(groupId, accessToken));
+
+        if (result) {
+            toggleAddGroup();
+        }
+    }, [dispatch, toggleAddGroup]);
 
     const handleCashChange = useCallback((e) => setCash(String(e.currentTarget.value.replace(/\s/g, ''))), []);
 

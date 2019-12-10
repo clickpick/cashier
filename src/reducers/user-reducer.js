@@ -33,7 +33,7 @@ export function userReducer(state = USER_STATE, action) {
             return {
                 ...state,
                 ownedGroups: state.ownedGroups.concat(action.entities),
-                selectedGroup: !state.selectedGroup && action.entities
+                selectedGroup: action.entities
             };
 
         case types.SET_SELECTED_GROUP:            
