@@ -100,7 +100,6 @@ const Input = ({ className, name, top, placeholder, value: initialValue, maxLeng
             <div className="Input__row">
                 <input
                     type="input"
-                    pattern="[0-9]*"
                     inputMode="numeric"
                     id={name}
                     name={name}
