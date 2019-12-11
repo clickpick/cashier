@@ -17,6 +17,7 @@ import Button from 'components/Button';
 
 import { gaps } from 'helpers/numbers';
 import { CREATED, PAID, ERROR_PAY } from 'constants/order';
+import { callTaptic, TAPTIC_SUCCESS } from 'helpers/taptic';
 import { VK_MAIN_APP_ID } from 'constants/vk';
 
 const Order = ({ id, back }) => {
@@ -28,6 +29,10 @@ const Order = ({ id, back }) => {
         window.Echo
             .private(`order.${activeOrder.id}`)
             .listen('OrderUpdated', ({ order }) => {
+                if (order.status === PAID) {
+                    callTaptic(TAPTIC_SUCCESS);
+                }
+
                 dispatch(updateActiveOrder(order));
             });
 
