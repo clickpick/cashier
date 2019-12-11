@@ -8,11 +8,14 @@ import { goForward, goBack } from 'actions/payment-actions';
 import { getUserState } from 'reducers/user-reducer';
 import { fetchAttachGroup } from 'actions/user-actions';
 
+import { fetchMakeOrder } from 'actions/active-order-actions';
+
 import connect from '@vkontakte/vk-connect';
 
 import { ConfigProvider, View, ScreenSpinner } from '@vkontakte/vkui';
 
 import Home from 'panels/Home';
+import Order from 'panels/Order';
 import * as PANELS from 'constants/panels';
 
 import AddGroup from 'components/AddGroup';
@@ -35,15 +38,6 @@ const Payment = ({ id }) => {
 
     const dispatch = useDispatch();
 
-    const go = useCallback((e) => {
-        dispatch(
-            goForward(
-                e.currentTarget.dataset.panel,
-                callback
-            )
-        );
-    }, [dispatch]);
-
     const back = useCallback(() => dispatch(goBack), [dispatch]);
 
     const onAttachGroup = useCallback((groupId, accessToken) => {
@@ -52,6 +46,17 @@ const Payment = ({ id }) => {
         if (result) {
             setShowAddGroup(false);
         }
+    }, [dispatch]);
+
+    const createOrder = useCallback(async (groupId, value) => {
+        setPopout(<ScreenSpinner />);
+        const result = await dispatch(fetchMakeOrder(groupId, value));
+
+        if (result) {
+            dispatch(goForward(PANELS.ORDER, callback));
+        }
+
+        setPopout(null);
     }, [dispatch]);
 
     useEffect(() => {
@@ -92,7 +97,8 @@ const Payment = ({ id }) => {
     return <>
         <ConfigProvider isWebView={true}>
             <View id={id} {...viewState} popout={popout} onSwipeBack={back}>
-                <Home id={PANELS.HOME} />
+                <Home id={PANELS.HOME} createOrder={createOrder} />
+                <Order id={PANELS.ORDER} back={back} />
             </View>
         </ConfigProvider>
 

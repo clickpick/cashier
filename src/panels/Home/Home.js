@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { string } from 'prop-types';
+import { string, func } from 'prop-types';
 
 import './Home.css';
 
@@ -24,7 +24,7 @@ const MODES = {
     ADD_GROUP: 'add-group'
 };
 
-const Home = ({ id }) => {
+const Home = ({ id, createOrder }) => {
     const groups = useSelector(getUserGroups);
     const selectedGroup = useSelector(getUserSelectedGroup);
 
@@ -90,7 +90,9 @@ const Home = ({ id }) => {
 
     const handleSubmit = useCallback((e) => {
         e.preventDefault();
-    }, []);
+
+        createOrder(selectedGroup.id, cash);
+    }, [selectedGroup, cash, createOrder]);
 
     return (
         <Panel id={id} className="Home">
@@ -144,7 +146,8 @@ const Home = ({ id }) => {
 };
 
 Home.propTypes = {
-    id: string.isRequired
+    id: string.isRequired,
+    createOrder: func.isRequired
 };
 
 export default Home;
