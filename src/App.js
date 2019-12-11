@@ -8,6 +8,8 @@ import { getStory } from 'reducers/story-reducer';
 import { setStory } from 'actions/story-actions';
 import { getUserSelectedGroup } from 'reducers/user-reducer';
 
+import connect from '@vkontakte/vk-connect';
+
 import { fetchGroups } from 'actions/user-actions';
 
 import * as VIEWS from 'constants/views';
@@ -60,8 +62,12 @@ const App = () => {
 	}, [activeStory, selectedGroup, onStoryChange]);
 
 	useEffect(() => {
-		dispatch(fetchGroups)
+		dispatch(fetchGroups);		
 	}, [dispatch]);
+
+	useEffect(() => {
+		connect.send('VKWebAppSetViewSettings', { status_bar_style: 'dark', action_bar_color: '#fff' });
+	}, []);
 
 	return (
 		<ConfigProvider isWebView>
