@@ -12,7 +12,7 @@ import { fetchMakeOrder } from 'actions/active-order-actions';
 
 import connect from '@vkontakte/vk-connect';
 
-import { ConfigProvider, View, ScreenSpinner } from '@vkontakte/vkui';
+import { View, ScreenSpinner } from '@vkontakte/vkui';
 
 import Home from 'panels/Home';
 import Order from 'panels/Order';
@@ -95,12 +95,10 @@ const Payment = ({ id }) => {
     }, [loading, ownedGroups, cashiedGroups]);
 
     return <>
-        <ConfigProvider isWebView={true}>
-            <View id={id} {...viewState} popout={popout} onSwipeBack={back}>
-                <Home id={PANELS.HOME} createOrder={createOrder} />
-                <Order id={PANELS.ORDER} back={back} />
-            </View>
-        </ConfigProvider>
+        <View id={id} {...viewState} popout={popout} onSwipeBack={back}>
+            <Home id={PANELS.HOME} createOrder={createOrder} />
+            <Order id={PANELS.ORDER} back={back} />
+        </View>
 
         <AddGroup
             visible={showAddGroup}

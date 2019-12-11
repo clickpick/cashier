@@ -11,7 +11,7 @@ import { getUserSelectedGroup } from 'reducers/user-reducer';
 import { fetchGroups } from 'actions/user-actions';
 
 import * as VIEWS from 'constants/views';
-import { Epic, Tabbar, TabbarItem } from '@vkontakte/vkui';
+import { ConfigProvider, Epic, Tabbar, TabbarItem } from '@vkontakte/vkui';
 
 import { ReactComponent as IconStatistics } from 'svg/statistics.svg';
 import { ReactComponent as IconPayment } from 'svg/payment.svg';
@@ -64,10 +64,12 @@ const App = () => {
 	}, [dispatch]);
 
 	return (
-		<Epic activeStory={activeStory} tabbar={tabbar}>
-			<Payment id={VIEWS.PAYMENT} />
-			<Settings id={VIEWS.SETTINGS} />
-		</Epic>
+		<ConfigProvider isWebView>
+			<Epic activeStory={activeStory} tabbar={tabbar}>
+				<Payment id={VIEWS.PAYMENT} />
+				<Settings id={VIEWS.SETTINGS} />
+			</Epic>
+		</ConfigProvider>
 	);
 }
 
