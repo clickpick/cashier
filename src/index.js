@@ -7,6 +7,11 @@ import connect from '@vkontakte/vk-connect';
 
 import '@vkontakte/vkui/dist/vkui.css';
 
+import Echo from 'laravel-echo';
+import io from 'socket.io-client';
+import { parseQueryString } from 'helpers/location';
+import { getTimezoneOffset } from 'helpers/dates';
+
 import { Provider } from 'react-redux';
 import configureStore from 'store/configureStore';
 import { INITIAL_STATE } from 'constants/store';
@@ -16,6 +21,22 @@ import App from './App';
 
 // Init VK  Mini App
 connect.send('VKWebAppInit');
+
+window.io = io;
+window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: process.env.REACT_APP_API_URL,
+    path: '/socket.io/',
+    auth: {
+        headers: {
+            'Vk-Params': window.btoa(JSON.stringify({
+                ...parseQueryString(window.location.search),
+                auth_type: 'front',
+                utc_offset: getTimezoneOffset()
+            })),
+        }
+    }
+});
 
 // Если вы хотите, чтобы ваше веб-приложение работало в оффлайне и загружалось быстрее,
 // расскомментируйте строку с registerServiceWorker();
