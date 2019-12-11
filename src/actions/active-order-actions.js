@@ -7,6 +7,11 @@ const setActiveOrder = (entities) => ({
     entities
 });
 
+const updateActiveOrder = (entities) => ({
+    type: types.UPDATE_ACTIVE_ORDER,
+    entities
+});
+
 const fetchMakeOrder = (groupId, value) => async (dispatch) => {
     try {
         const order = await API.makeOrder(groupId, value);
@@ -19,4 +24,4 @@ const fetchMakeOrder = (groupId, value) => async (dispatch) => {
     }
 };
 
-export { fetchMakeOrder };
+export { fetchMakeOrder, updateActiveOrder };

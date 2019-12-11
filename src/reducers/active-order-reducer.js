@@ -6,6 +6,12 @@ export function activeOrderReducer(state = ACTIVE_ORDER, action) {
         case types.SET_ACTIVE_ORDER:
             return action.entities;
 
+        case types.UPDATE_ACTIVE_ORDER:
+            return {
+                ...state,
+                ...action.entities
+            };
+
         default:
             return state;
     }
