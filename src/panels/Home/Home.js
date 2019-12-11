@@ -116,25 +116,29 @@ const Home = ({ id, createOrder }) => {
                 </List>
             </HeaderContext>
 
-            <form className="Home__form" onSubmit={handleSubmit}>
-                <Input
-                    className="Home__Input"
-                    name="cash"
-                    top="Выставить счёт"
-                    placeholder="300"
-                    value={cash}
-                    postfix=" ₽"
-                    onChange={handleCashChange} />
-                <Button
-                    className="Home__Button"
-                    type="submit"
-                    theme="primary"
-                    size="medium"
-                    children="Выставить QR-счёт"
-                    disabled={!Boolean(cash)}
-                    full
-                    backlight />
-            </form>
+            {(selectedGroup)
+                ? (selectedGroup.payment_method)
+                    ? <form className="Home__form" onSubmit={handleSubmit}>
+                        <Input
+                            className="Home__Input"
+                            name="cash"
+                            top="Выставить счёт"
+                            placeholder="300"
+                            value={cash}
+                            postfix=" ₽"
+                            onChange={handleCashChange} />
+                        <Button
+                            className="Home__Button"
+                            type="submit"
+                            theme="primary"
+                            size="medium"
+                            children="Выставить QR-счёт"
+                            disabled={!Boolean(cash)}
+                            full
+                            backlight />
+                    </form>
+                    : <p className="Home__message" children="Выберите способ оплаты в настройках" />
+                : null}
 
             <AddGroup
                 visible={showAddGroup}
