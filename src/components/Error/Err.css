@@ -1,0 +1,40 @@
+.Error {
+  stroke: var(--color-red);
+}
+
+.Error__circle {
+    stroke-dasharray: 160;
+    animation: error-circle 1s;
+    animation-fill-mode: both;
+}
+  
+.Error__path {
+    stroke-dasharray: 40;
+    animation: error-path .7s .7s;
+    animation-fill-mode: both;
+}
+
+@keyframes error-circle {
+    from {
+        stroke-dashoffset: 160;
+        opacity: 0;
+    }
+    70% {
+        opacity: 1;
+    }
+    to {
+        stroke-dashoffset: 0;
+        opacity: .5;
+    }
+}
+
+@keyframes error-path {
+    from {
+        stroke-dashoffset: 40;
+        opacity: 0;
+    }
+    to {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+}
