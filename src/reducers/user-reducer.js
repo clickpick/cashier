@@ -1,6 +1,17 @@
 import { USER_STATE } from 'constants/store';
 import * as types from 'constants/types';
 
+function updateCashiers(group) {
+    if (group.id === this.groupId) {
+        return {
+            ...group,
+            cashiers: this.cashiers
+        };
+    }
+
+    return group;
+}
+
 export function userReducer(state = USER_STATE, action) {
     switch (action.type) {
         case types.FETCH_GROUPS_LOAD: case types.FETCH_CASHIERS_LOAD:
@@ -49,20 +60,24 @@ export function userReducer(state = USER_STATE, action) {
                 ...state,
                 loading: false,
                 ownedGroups: (state.selectedGroup)
-                    ? state.ownedGroups.map((group) => {
-                        if (group.id === state.selectedGroup.id) {
-                            return {
-                                ...group,
-                                cashiers: action.cashiers
-                            };
-                        }
-
-                        return group;
-                    })
+                    ? state.ownedGroups.map(updateCashiers, { groupId: state.selectedGroup.id, cashiers: action.cashiers })
                     : state.ownedGroups,
                 selectedGroup: {
                     ...state.selectedGroup,
                     cashiers: action.cashiers
+                }
+            };
+
+        case types.DETACH_CASHIER:            
+            const cashiers = state.selectedGroup.cashiers
+                .filter((cashier) => cashier.id === action.cashierId);
+
+            return {
+                ...state,
+                ownedGroups: state.ownedGroups.map(updateCashiers, { groupId: action.groupId, cashiers }),
+                selectedGroup: {
+                    ...state.selectedGroup,
+                    cashiers
                 }
             };
 

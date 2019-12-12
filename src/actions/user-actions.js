@@ -40,6 +40,12 @@ const fetchCashiersError = (error) => ({
     error
 });
 
+const detachCashier = (groupId, cashierId) => ({
+    type: types.DETACH_CASHIER,
+    groupId,
+    cashierId
+});
+
 const fetchGroups = async (dispatch) => {    
     dispatch(fetchGroupsLoad());
 
@@ -92,4 +98,17 @@ const fetchCashiers = async (dispatch, getState) => {
     }
 };
 
-export { fetchGroups, fetchAttachGroup, selectGroup, fetchCashiers };
+const fetchDetachCashier = (cashierId) => async (dispatch, getState) => {    
+    const { user: { selectedGroup } } = getState();
+
+    if (!selectedGroup) {
+        return;
+    }
+
+    try {
+        await API.detachCashiers(selectedGroup.id, cashierId);
+        dispatch(detachCashier(selectedGroup.id, cashierId));
+    } catch (e) {}
+};
+
+export { fetchGroups, fetchAttachGroup, selectGroup, fetchCashiers, fetchDetachCashier };
