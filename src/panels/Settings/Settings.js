@@ -112,8 +112,8 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                         ? <div className="Settings__cashiers" children={cashiers.map(renderCashier)} />
                         : <Title
                             className="Settings__Title"
-                            children="Кассиры отсутствуют"
-                            hint="Добавьте кассиров" />}
+                            children="Сотрудники отсутствуют"
+                            hint="Добавьте новых сотрудников" />}
 
                 <FixedLayout
                     className="Settings__FixedLayout"
