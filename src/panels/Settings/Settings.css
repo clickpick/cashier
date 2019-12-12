@@ -1,0 +1,42 @@
+.Settings__Tabs {
+    margin-bottom: 10px;
+}
+
+.Settings__details[open] {
+    padding-top: 60px;
+}
+
+.Settings__details > summary {
+    display: none;
+}
+
+.Settings__cashiers {
+    padding-bottom: 126px;
+}
+
+.Settings__detach {
+    border: 0;
+    background-color: transparent;
+}
+
+.Settings__detach svg {
+    fill: var(--color-red);
+}
+
+.Settings__Title {
+    padding-top: 50%;
+    padding-bottom: 50%;
+}
+
+.Settings__FixedLayout .FixedLayout__in {
+    padding-right: 40px;
+    padding-bottom: 30px;
+    padding-left: 40px;
+}
+
+@media (max-width: 360px) {
+    .Settings__FixedLayout .FixedLayout__in {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+}

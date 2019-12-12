@@ -9,7 +9,7 @@ export const PAYMENT_STATE = {
 };
 
 export const SETTINGS_STATE = {
-    activeTab: 'tab'
+    activeTab: 'general'
 };
 
 export const USER_STATE = {
