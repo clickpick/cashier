@@ -70,7 +70,7 @@ export function userReducer(state = USER_STATE, action) {
 
         case types.DETACH_CASHIER:            
             const cashiers = state.selectedGroup.cashiers
-                .filter((cashier) => cashier.id === action.cashierId);
+                .filter((cashier) => cashier.id !== action.cashierId);
 
             return {
                 ...state,
