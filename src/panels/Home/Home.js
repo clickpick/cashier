@@ -17,6 +17,7 @@ import Icon24Done from '@vkontakte/icons/dist/24/done';
 
 import Input from 'components/Input';
 import Button from 'components/Button';
+import Title from 'components/Title';
 import AddGroup from 'components/AddGroup';
 
 const MODES = {
@@ -137,7 +138,10 @@ const Home = ({ id, createOrder }) => {
                             full
                             backlight />
                     </form>
-                    : <p className="Home__message" children="Выберите способ оплаты в настройках" />
+                    : <Title
+                        className="Home__Title"
+                        children="Способ оплаты не выбран"
+                        hint="Выберите его в настройках" />
                 : null}
 
             <AddGroup

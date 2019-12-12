@@ -17,8 +17,8 @@
     margin-bottom: 20px;
 }
 
-.Home__message {
-    text-align: center;
+.Home__Title {
+    width: 100%;
 }
 
 @media (max-width: 360px) {
