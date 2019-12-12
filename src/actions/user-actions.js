@@ -26,8 +26,22 @@ const setSelectedGroup = (entities) => ({
     entities
 });
 
+const fetchCashiersLoad = () => ({
+    type: types.FETCH_CASHIERS_LOAD
+});
+
+const fetchCashiersSuccess = (cashiers) => ({
+    type: types.FETCH_CASHIERS_SUCCESS,
+    cashiers
+});
+
+const fetchCashiersError = (error) => ({
+    type: types.FETCH_CASHIERS_ERROR,
+    error
+});
+
 const fetchGroups = async (dispatch) => {    
-    dispatch(fetchGroupsLoad);
+    dispatch(fetchGroupsLoad());
 
     try {
         const responses = await Promise.all([API.getOwnedGroups(), API.getCashiedGroups()]);
@@ -60,4 +74,23 @@ const fetchAttachGroup = (groupId, accessToken) => async (dispatch) => {
 
 const selectGroup = (group) => (dispatch) => dispatch(setSelectedGroup(group));
 
-export { fetchGroups, fetchAttachGroup, selectGroup };
+const fetchCashiers = async (dispatch, getState) => {
+    const { user: { selectedGroup } } = getState();
+
+    if (!selectedGroup) {
+        return;
+    }
+
+    dispatch(fetchCashiersLoad());
+
+    try {
+        const cashiers = await API.getCashiers(selectedGroup.id);
+
+        setTimeout(() => dispatch(fetchCashiersSuccess(cashiers)), 5000)
+        // dispatch(fetchCashiersSuccess(cashiers));
+    } catch (e) {
+        dispatch(fetchCashiersError('cashiers error'));
+    }
+};
+
+export { fetchGroups, fetchAttachGroup, selectGroup, fetchCashiers };

@@ -3,7 +3,7 @@ import * as types from 'constants/types';
 
 export function userReducer(state = USER_STATE, action) {
     switch (action.type) {
-        case types.FETCH_GROUPS_LOAD:
+        case types.FETCH_GROUPS_LOAD: case types.FETCH_CASHIERS_LOAD:
             return {
                 ...state,
                 loading: true
@@ -13,16 +13,16 @@ export function userReducer(state = USER_STATE, action) {
             return {
                 ...state,
                 loading: false,
-                ownedGroups: action.ownedGroups.map((group) => ({ ...group, owned: true })),
+                ownedGroups: action.ownedGroups.map((group) => ({ ...group, owned: true, cashiers: null })),
                 cashiedGroups: action.cashiedGroups.map((group) => ({ ...group, owned: false })),
                 selectedGroup: (action.ownedGroups.length > 0)
-                    ? { ...action.ownedGroups[0], owned: true }
+                    ? { ...action.ownedGroups[0], owned: true, cashiers: null }
                     : (action.cashiedGroups.length > 0)
                         ? { ...action.cashiedGroups[0], owned: false }
                         : null
             };
 
-        case types.FETCH_GROUPS_ERROR:
+        case types.FETCH_GROUPS_ERROR: case types.FETCH_CASHIERS_ERROR:
             return {
                 ...state,
                 loading: false,
@@ -44,6 +44,28 @@ export function userReducer(state = USER_STATE, action) {
                 selectedGroup: action.entities
             };
 
+        case types.FETCH_CASHIERS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                ownedGroups: (state.selectedGroup)
+                    ? state.ownedGroups.map((group) => {
+                        if (group.id === state.selectedGroup.id) {
+                            return {
+                                ...group,
+                                cashiers: action.cashiers
+                            };
+                        }
+
+                        return group;
+                    })
+                    : state.ownedGroups,
+                selectedGroup: {
+                    ...state.selectedGroup,
+                    cashiers: action.cashiers
+                }
+            };
+
         default:
             return state;
     }
@@ -60,4 +82,14 @@ export const getUserGroups = (state) => {
 
     return null;
 }
+
 export const getUserSelectedGroup = (state) => state.user.selectedGroup;
+export const getCashiers = (state) => {
+    const selectedGroups = getUserSelectedGroup(state);
+
+    if (selectedGroups) {
+        return [getUserLoading(state), selectedGroups.cashiers];
+    }
+
+    return [false, []];
+};
