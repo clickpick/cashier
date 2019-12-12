@@ -38,12 +38,12 @@ const App = () => {
 		return (
 			<Tabbar shadow={false}>
 				<TabbarItem
-					className={className}
+					className="TabbarItem--disabled"
 					selected={activeStory === VIEWS.LOADER}
 					data-story={VIEWS.LOADER}
 					children={<IconStatistics />}
 					text="Статистика"
-					onClick={handleClick} />
+					onClick={undefined} />
 				<TabbarItem
 					selected={activeStory === VIEWS.PAYMENT}
 					data-story={VIEWS.PAYMENT}
@@ -62,7 +62,7 @@ const App = () => {
 	}, [activeStory, selectedGroup, onStoryChange]);
 
 	useEffect(() => {
-		dispatch(fetchGroups);		
+		dispatch(fetchGroups);
 	}, [dispatch]);
 
 	useEffect(() => {
