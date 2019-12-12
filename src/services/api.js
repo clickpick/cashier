@@ -50,6 +50,16 @@ class API {
 
         return data;
     }
+
+    getCashiers = async (group_id) => {
+        if (!group_id) {
+            throw new Error('Bad group id');
+        }
+
+        const { data: { data } } = await get(`/vk-user/groups/${group_id}/cashiers`);
+
+        return data;
+    }
 }
 
 export default new API();
