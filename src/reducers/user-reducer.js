@@ -68,6 +68,18 @@ export function userReducer(state = USER_STATE, action) {
                 }
             };
 
+        case types.ATTACH_CASHIERS:            
+            const attachedCashiers = state.selectedGroup.cashiers.concat(action.cashiers);
+
+            return {
+                ...state,
+                ownedGroups: state.ownedGroups.map(updateCashiers, { groupId: action.groupId, cashiers: attachedCashiers }),
+                selectedGroup: {
+                    ...state.selectedGroup,
+                    cashiers: attachedCashiers
+                }
+            };
+
         case types.DETACH_CASHIER:            
             const cashiers = state.selectedGroup.cashiers
                 .filter((cashier) => cashier.id !== action.cashierId);

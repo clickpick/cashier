@@ -60,6 +60,32 @@ class API {
 
         return data;
     }
+
+    attachGroup = async (group_id, user_id) => {
+        if (!group_id) {
+            throw new Error('Bad group id');
+        }
+
+        if (!user_id) {
+            throw new Error('Bad user id');
+        }
+
+        const { data: { data } } = await post('/vk-user/attach-cashier', { group_id, user_id });
+
+        return data;
+    }
+
+    detachCashiers = async (group_id, user_id) => {
+        if (!group_id) {
+            throw new Error('Bad group id');
+        }
+
+        if (!user_id) {
+            throw new Error('Bad user id');
+        }
+
+        return await post('/vk-user/detach-cashier', { group_id, user_id });
+    }
 }
 
 export default new API();

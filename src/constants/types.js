@@ -12,6 +12,7 @@ export const SET_SELECTED_GROUP = 'set-selected-group';
 export const FETCH_CASHIERS_LOAD = 'fetch-cashiers-load';
 export const FETCH_CASHIERS_SUCCESS = 'fetch-cashiers-success';
 export const FETCH_CASHIERS_ERROR = 'fetch-cashiers-error';
+export const ATTACH_CASHIERS = 'attach-cashiers';
 export const DETACH_CASHIER = 'detach-cashier';
 
 export const SET_ACTIVE_ORDER = 'set-active-order';
