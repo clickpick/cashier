@@ -86,8 +86,7 @@ const fetchCashiers = async (dispatch, getState) => {
     try {
         const cashiers = await API.getCashiers(selectedGroup.id);
 
-        setTimeout(() => dispatch(fetchCashiersSuccess(cashiers)), 5000)
-        // dispatch(fetchCashiersSuccess(cashiers));
+        dispatch(fetchCashiersSuccess(cashiers));
     } catch (e) {
         dispatch(fetchCashiersError('cashiers error'));
     }
