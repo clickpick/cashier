@@ -1,0 +1,9 @@
+.TabItem {
+    position: relative;
+
+    color: var(--color-gray);
+    text-transform: none;
+
+    transition-property: background-color, color;
+    transition: 150ms ease-in;
+}
