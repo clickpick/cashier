@@ -3,6 +3,7 @@ import { string } from 'prop-types';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getActiveTab } from 'reducers/settings-reducer';
+import { setSettingsTab } from 'actions/settings-actions';
 
 import { View } from '@vkontakte/vkui';
 
@@ -15,11 +16,15 @@ const Settings = ({ id }) => {
 
     const dispatch = useDispatch();
 
-    const handleTabChange = useCallback(() => dispatch(), [dispatch]);
+    const handleTabChange = useCallback((e) =>
+        dispatch(setSettingsTab(e.currentTarget.dataset.tab)), [dispatch]);
 
     return (
         <View id={id} activePanel={PANELS.SETTINGS}>
-            <SettingsPanel id={PANELS.SETTINGS} onTabChange={handleTabChange} />
+            <SettingsPanel
+                id={PANELS.SETTINGS}
+                activeTab={activeTab}
+                onTabChange={handleTabChange} />
         </View>
     );
 };
