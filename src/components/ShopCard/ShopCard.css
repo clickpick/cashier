@@ -1,0 +1,42 @@
+.ShopCard {
+    display: flex;
+    
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    overflow: hidden;
+}
+
+.ShopCard__Avatar {
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+.ShopCard__info {
+    flex-grow: 2;
+    overflow: hidden;
+}
+
+.ShopCard__name {
+    margin-bottom: 2px;
+
+    font-size: var(--font-size-17);
+    font-weight: var(--font-weight-normal);
+    color: var(--shop-card_color-name);
+    letter-spacing: -0.408px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ShopCard__activity {
+    display: block;
+
+    font-size: var(--font-size-15);
+    color: var(--shop-card_color-activity);
+    letter-spacing: -0.24px;
+}
+
+.ShopCard__activity--with-after {
+    margin-bottom: 8px;
+}

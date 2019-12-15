@@ -55,6 +55,13 @@
     --button_svg-fill: var(--color-white);
 
     /**
+     * ShopCard Component
+     */
+    --shop-card_color-name: var(--color-primary);
+    --shop-card_color-activity: var(--color-gray);
+    --shop-card_color-cashback: var(--color-primary);
+
+    /**
      * Popup Component
      */
     --popup-dialog-background: var(--color-white);
