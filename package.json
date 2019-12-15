@@ -9,6 +9,7 @@
     "proxy": "ssh -vnNT -R 3000:localhost:4600 forge@dev.ezavalishin.ru",
     "deploy": "rm -rf build/ && react-scripts build && vk-miniapps-deploy"
   },
+  "homepage": "./",
   "keywords": [],
   "author": "",
   "license": "MIT",
