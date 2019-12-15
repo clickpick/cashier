@@ -21,7 +21,6 @@ import {
     Alert, FixedLayout } from '@vkontakte/vkui';
 import Tabs from 'components/Tabs';
 import Loader from 'components/Loader';
-import Wrapper from 'components/Wrapper';
 import ShopCard from 'components/ShopCard';
 import Tag from 'components/Tag';
 import Title from 'components/Title';
@@ -225,7 +224,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                 
                 {(loading) && <Loader center />}
 
-                {(!loading && Array.isArray(cashiers)) &&
+                {(Array.isArray(cashiers)) &&
                     (cashiers.length > 0)
                         ? <div className="Settings__cashiers" children={cashiers.map(renderCashier)} />
                         : <Title
