@@ -12,6 +12,7 @@ import {
 
 import connect from '@vkontakte/vk-connect';
 
+import { STATUS_ACCEPTED, STATUS_DECLINED } from 'constants/group-statuses';
 import { TABS } from 'constants/settings';
 
 import {
@@ -20,6 +21,9 @@ import {
     Alert, FixedLayout } from '@vkontakte/vkui';
 import Tabs from 'components/Tabs';
 import Loader from 'components/Loader';
+import Wrapper from 'components/Wrapper';
+import ShopCard from 'components/ShopCard';
+import Tag from 'components/Tag';
 import Title from 'components/Title';
 import Button from 'components/Button';
 import Message from 'components/Message';
@@ -34,6 +38,27 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
     const [loading, cashiers] = useSelector(getCashiers);
 
     const dispatch = useDispatch();
+
+    /**
+     * Методы для группы
+     */
+    const tag = useMemo(() => {
+        if (selectedGroup) {
+            let props = { children: 'На рассмотрении' };
+
+            if (selectedGroup.status === STATUS_ACCEPTED) {
+                props = { children: 'В каталоге', theme: 'green' };
+            }
+
+            if (selectedGroup.status === STATUS_DECLINED) {
+                props = { children: 'Отклонено', theme: 'red' };
+            }
+
+            return <Tag {...props} />;
+        }
+
+        return undefined;
+    }, [selectedGroup])
 
     /**
      * Методы для сотрудников
@@ -170,15 +195,37 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
 
             <details className="Settings__details" open={activeTab === 'general'}>
                 <summary />
-                general
+                {(selectedGroup) && <>
+                    <ShopCard
+                        className="Settings__ShopCard"
+                        {...selectedGroup}
+                        afterContent={tag} />
+
+                    {(selectedGroup.status === STATUS_DECLINED) &&
+                        <Title children="Заведение отклонено" />}
+                </>}
+                <FixedLayout
+                    className="Settings__FixedLayout"
+                    vertical="bottom">
+                    <Button
+                        className="Settings__Button"
+                        theme="primary"
+                        size="medium"
+                        href="https://vk.me/clickdev"
+                        target="_blank"
+                        children="Написать разработчику"
+                        before={<IconVk />}
+                        full
+                        backlight />
+                </FixedLayout>
             </details>
 
             <details className="Settings__details" open={activeTab === 'cashiers'}>
                 <summary />
                 
                 {(loading) && <Loader center />}
-                {/* todo */}
-                {(Array.isArray(cashiers)) &&
+
+                {(!loading && Array.isArray(cashiers)) &&
                     (cashiers.length > 0)
                         ? <div className="Settings__cashiers" children={cashiers.map(renderCashier)} />
                         : <Title
