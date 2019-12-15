@@ -34,6 +34,23 @@
     padding-left: 40px;
 }
 
+.Settings__List,
+.Settings__Message {
+    margin-bottom: 10px;
+}
+
+.Settings__Cell--selectable * {
+    box-sizing: border-box;
+}
+
+.Settings__status {
+    padding: 10px 20px;
+}
+
+.Settings__Button--generate-payment-params {
+    margin-left: 20px;
+}
+
 @media (max-width: 360px) {
     .Settings__FixedLayout .FixedLayout__in {
         padding-right: 20px;

@@ -1,30 +1,43 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useMemo, useEffect } from 'react';
 import { string, func } from 'prop-types';
 
 import './Settings.css';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getCashiers } from 'reducers/user-reducer';
-import { fetchCashiers, fetchAttachCashiers, fetchDetachCashier } from 'actions/user-actions';
+import { getUserSelectedGroup, getCashiers } from 'reducers/user-reducer';
+import {
+    fetchCashiers, fetchAttachCashiers, fetchDetachCashier,
+    fetchSetPaymentMethod, fetchGroupPaymentParams, fetchGenerateGroupPaymentParams
+} from 'actions/user-actions';
 
 import connect from '@vkontakte/vk-connect';
 
 import { TABS } from 'constants/settings';
 
-import { Panel, PanelHeader, Cell, Avatar, Alert, FixedLayout } from '@vkontakte/vkui';
+import {
+    Panel, PanelHeader,
+    List, Cell, Avatar,
+    Alert, FixedLayout } from '@vkontakte/vkui';
 import Tabs from 'components/Tabs';
 import Loader from 'components/Loader';
 import Title from 'components/Title';
 import Button from 'components/Button';
+import Message from 'components/Message';
 
 import { ReactComponent as IconTrash } from 'svg/trash.svg';
 import { ReactComponent as IconVk } from 'svg/vk.svg';
 
-const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, onTabChange }) => { 
+import { PAYMENT_NOT_ACCEPT, PAYMENT_GROUP, PAYMENT_SERVICE } from 'constants/payment-methods';
+
+const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, onTabChange }) => {
+    const selectedGroup = useSelector(getUserSelectedGroup);
     const [loading, cashiers] = useSelector(getCashiers);
 
     const dispatch = useDispatch();
 
+    /**
+     * Методы для сотрудников
+     */
     const showDetachAlert = useCallback((e) => {
         e.persist();
         const cashierId = Number(e.currentTarget.dataset.cashierId);
@@ -81,10 +94,67 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
     }, [dispatch, toggleSpinnerPopup]);
 
     useEffect(() => {
-        if (!loading && cashiers === null) {            
+        if (!loading && cashiers === null && activeTab === 'cashiers') {            
             dispatch(fetchCashiers);
         }
-    }, [loading, cashiers, dispatch]);
+    }, [activeTab, loading, cashiers, dispatch]);
+
+    /**
+     * Методы для настройки получения денег
+     */
+
+    const paymentMethodNotAllowed = useMemo(() => {
+        if (selectedGroup) {
+            return selectedGroup.payment_method === PAYMENT_NOT_ACCEPT || selectedGroup.payment_method === '';
+        }
+
+        return false;
+    }, [selectedGroup]);
+    const paymentMethodGroup = useMemo(() => selectedGroup && selectedGroup.payment_method === PAYMENT_GROUP, [selectedGroup]);
+    const paymentMethodService = useMemo(() => selectedGroup && selectedGroup.payment_method === PAYMENT_SERVICE, [selectedGroup]);
+    
+    const getGroupPaymentParams = useCallback(async () => {
+        toggleSpinnerPopup();
+        await dispatch(fetchGroupPaymentParams());
+        toggleSpinnerPopup();
+    }, [toggleSpinnerPopup, dispatch]);
+
+    const setPaymentMethod = useCallback(async (paymentMethod) => {
+        toggleSpinnerPopup();
+        await dispatch(fetchSetPaymentMethod(selectedGroup.id, paymentMethod));
+        toggleSpinnerPopup();
+    }, [selectedGroup, toggleSpinnerPopup, dispatch]);
+
+    const handlePaymentMethodChange = useCallback((e) => {        
+        if (e.target.value === '' && !paymentMethodNotAllowed) {            
+            return setPaymentMethod(PAYMENT_NOT_ACCEPT);
+        }
+
+        if (e.target.value === PAYMENT_GROUP && !paymentMethodGroup) {
+            return getGroupPaymentParams();
+        }
+    }, [
+        paymentMethodGroup,
+        setPaymentMethod,
+        getGroupPaymentParams
+    ]);
+
+    useEffect(() => {
+        if (
+            activeTab === 'money' &&
+            selectedGroup &&
+            selectedGroup.payment_method === PAYMENT_GROUP &&
+            !selectedGroup.groupPaymentParams
+        ) {
+            getGroupPaymentParams();
+        }
+    }, [activeTab, selectedGroup, getGroupPaymentParams]);
+
+    const generateGroupPaymentParams = useCallback(async () => {
+        toggleSpinnerPopup();
+        await dispatch(fetchGenerateGroupPaymentParams());
+        toggleSpinnerPopup();
+    }, [toggleSpinnerPopup, dispatch]);
 
     return (
         <Panel id={id} className="Settings">
@@ -107,6 +177,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                 <summary />
                 
                 {(loading) && <Loader center />}
+                {/* todo */}
                 {(Array.isArray(cashiers)) &&
                     (cashiers.length > 0)
                         ? <div className="Settings__cashiers" children={cashiers.map(renderCashier)} />
@@ -130,10 +201,53 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                 </FixedLayout>
             </details>
 
-            <details className="Settings__details" open={activeTab === 'money'}>
-                <summary />
-                money
-            </details>
+            {(selectedGroup) &&
+                <details className="Settings__details" open={activeTab === 'money'}>
+                    <summary />
+                    <List className="Settings__List">
+                        <Cell
+                            className="Settings__Cell  Settings__Cell--selectable"
+                            selectable
+                            checked={paymentMethodNotAllowed}
+                            value={''}
+                            onChange={handlePaymentMethodChange}
+                            children="Не принимать оплату" />
+                        <Cell
+                            className="Settings__Cell  Settings__Cell--selectable"
+                            selectable
+                            checked={paymentMethodGroup}
+                            value={PAYMENT_GROUP}
+                            onChange={handlePaymentMethodChange}
+                            children="Принимать как физ. лицо" />
+                        <Cell
+                            className="Settings__Cell  Settings__Cell--selectable"
+                            selectable
+                            checked={paymentMethodService}
+                            value={PAYMENT_SERVICE}
+                            onChange={handlePaymentMethodChange}
+                            children="Принимать как юр. лицо" />
+                    </List>
+
+                    {(paymentMethodGroup) &&
+                        <Message
+                            className="Settings__Message"
+                            theme="gray"
+                            size="small"
+                            children="Мы не призываем вас использовать переводы на физическое лицо, всё на свой страх и риск." />}
+
+                    {(!paymentMethodNotAllowed && selectedGroup.groupPaymentParams) && <>
+                        {(selectedGroup.groupPaymentParams.is_ready)
+                            ? <p className="Settings__status" children="Статус: Всё готово." />
+                            : <>
+                                <p className="Settings__status" children="Статус: почти готово. Осталось сгенерировать параметры." />
+                                <Button
+                                    className="Settings__Button  Settings__Button--generate-payment-params"
+                                    theme="primary"
+                                    children="Сгенерировать параметры"
+                                    onClick={generateGroupPaymentParams} />
+                            </>}
+                    </>}
+                </details>}
 
         </Panel>
     );

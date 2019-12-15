@@ -23,6 +23,7 @@
     --tabbar_active_icon: var(--color-primary);
     --content_tint_background: var(--color-white);
     --separator_common: var(--color-white);
+    --accent: var(--color-primary);
 
     --font-size-11: 11px;
     --font-size-13: 13px;
