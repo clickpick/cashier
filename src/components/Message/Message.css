@@ -1,0 +1,16 @@
+.Message {
+    display: block;
+    padding: 10px 40px;
+
+    font-size: var(--font-size-15);
+    text-align: center;
+    letter-spacing: 0.07px;
+}
+
+.Message--small {
+    font-size: var(--font-size-11);
+}
+
+.Message--gray {
+    color: var(--color-gray);
+}
