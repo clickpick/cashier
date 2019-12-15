@@ -1,0 +1,41 @@
+.Tag {
+    display: inline-block;
+
+    padding: 4px 6px;
+
+    border-radius: 4px;
+
+    background-color: rgba(var(--color-gray-rgb), 0.1);
+
+    font-size: var(--font-size-11);
+    color: var(--color-gray);
+    line-height: 16px;
+    letter-spacing: 0.07px;
+}
+
+.Tag--red {
+    background-color: rgba(var(--color-red-rgb), 0.1);
+    color: var(--color-red);
+}
+
+.Tag--red svg {
+    fill: var(--color-red);
+}
+
+.Tag--green {
+    background-color: rgba(var(--color-green-rgb), 0.1);
+    color: var(--color-green);
+}
+
+.Tag--green svg {
+    fill: var(--color-green);
+}
+
+.Tag--blue {
+    background-color: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+}
+
+.Tag--blue svg {
+    fill: var(--color-primary);
+}

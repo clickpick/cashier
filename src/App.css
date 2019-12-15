@@ -10,9 +10,12 @@
     --color-primary: #007AFF;
     --color-primary-rgb: 0, 122, 255;
     --color-gray: #ABB2C6;
+    --color-gray-rgb: 171, 178, 198;
     --color-light-gray: #D9D9D9;
     --color-red: #FF3B30;
+    --color-red-rgb: 255, 59, 48;
     --color-green: #27AE60;
+    --color-green-rgb: 39, 174, 96;
 
     --header_background: var(--color-white);
     --background_page: var(--color-white);
