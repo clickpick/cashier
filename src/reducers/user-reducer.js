@@ -1,6 +1,5 @@
 import { USER_STATE } from 'constants/store';
 import * as types from 'constants/types';
-import { PAYMENT_NOT_ACCEPT, PAYMENT_GROUP } from 'constants/payment-methods';
 
 function updateCashiers(group) {
     if (group.id === this.groupId) {
@@ -52,7 +51,14 @@ export function userReducer(state = USER_STATE, action) {
             };
 
         case types.ATTACH_OWNED_GROUP:
-            const newOwnedGroups = { ...action.entities, owned: true };
+            console.log(action);
+
+            const newOwnedGroups = {
+                ...action.entities,
+                owned: true,
+                cashiers: null,
+                groupPaymentParams: null
+            };
 
             return {
                 ...state,

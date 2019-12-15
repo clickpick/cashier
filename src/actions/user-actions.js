@@ -131,9 +131,11 @@ const fetchAttachCashiers = (users) => async (dispatch, getState) => {
     }
 
     try {
-        const cashiers = await Promise.all(users.map((user) => API.attachGroup(selectedGroup.id, user.id)));
+        const cashiers = await Promise.all(users.map((user) => API.attachCashier(selectedGroup.id, user.id)));
         dispatch(attachCashiers(selectedGroup.id, cashiers));
-    } catch(e) {}
+    } catch(e) {
+        // todo
+    }
 };
 
 const fetchDetachCashier = (cashierId) => async (dispatch, getState) => {    

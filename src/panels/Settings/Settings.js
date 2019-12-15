@@ -134,7 +134,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
             return getGroupPaymentParams();
         }
     }, [
-        paymentMethodGroup,
+        paymentMethodNotAllowed, paymentMethodGroup,
         setPaymentMethod,
         getGroupPaymentParams
     ]);

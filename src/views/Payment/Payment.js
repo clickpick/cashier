@@ -40,8 +40,8 @@ const Payment = ({ id }) => {
 
     const back = useCallback(() => dispatch(goBack), [dispatch]);
 
-    const onAttachGroup = useCallback((groupId, accessToken) => {
-        const result = dispatch(fetchAttachGroup(groupId, accessToken));
+    const onAttachGroup = useCallback(async (groupId, accessToken) => {        
+        const result = await dispatch(fetchAttachGroup(groupId, accessToken));
         
         if (result) {
             setShowAddGroup(false);

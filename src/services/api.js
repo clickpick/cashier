@@ -61,7 +61,7 @@ class API {
         return data;
     }
 
-    attachGroup = async (group_id, user_id) => {
+    attachCashier = async (group_id, user_id) => {
         if (!group_id) {
             throw new Error('Bad group id');
         }
