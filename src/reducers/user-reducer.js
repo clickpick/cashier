@@ -1,5 +1,6 @@
 import { USER_STATE } from 'constants/store';
 import * as types from 'constants/types';
+import { PAYMENT_NOT_ACCEPT, PAYMENT_GROUP } from 'constants/payment-methods';
 
 function updateCashiers(group) {
     if (group.id === this.groupId) {
@@ -24,10 +25,20 @@ export function userReducer(state = USER_STATE, action) {
             return {
                 ...state,
                 loading: false,
-                ownedGroups: action.ownedGroups.map((group) => ({ ...group, owned: true, cashiers: null })),
+                ownedGroups: action.ownedGroups.map((group) => ({
+                    ...group,
+                    owned: true,
+                    cashiers: null,
+                    groupPaymentParams: null
+                })),
                 cashiedGroups: action.cashiedGroups.map((group) => ({ ...group, owned: false })),
                 selectedGroup: (action.ownedGroups.length > 0)
-                    ? { ...action.ownedGroups[0], owned: true, cashiers: null }
+                    ? {
+                        ...action.ownedGroups[0],
+                        owned: true,
+                        cashiers: null,
+                        groupPaymentParams: null
+                    }
                     : (action.cashiedGroups.length > 0)
                         ? { ...action.cashiedGroups[0], owned: false }
                         : null
@@ -90,6 +101,44 @@ export function userReducer(state = USER_STATE, action) {
                 selectedGroup: {
                     ...state.selectedGroup,
                     cashiers
+                }
+            };
+
+        case types.SET_GROUP_PAYMENT_PARAMS:
+            return {
+                ...state,
+                ownedGroups: state.ownedGroups.map((group) => {
+                    if (group.id === action.groupId) {
+                        return {
+                            ...group,
+                            groupPaymentParams: action.groupPaymentParams
+                        };
+                    }
+
+                    return group;
+                }),
+                selectedGroup: {
+                    ...state.selectedGroup,
+                    groupPaymentParams: action.groupPaymentParams
+                }
+            };
+
+        case types.SET_GROUP_PAYMENT_METHOD:
+            return {
+                ...state,
+                ownedGroups: state.ownedGroups.map((group) => {
+                    if (group.id === action.groupId) {
+                        return {
+                            ...group,
+                            payment_method: action.paymentMethod
+                        };
+                    }
+
+                    return group;
+                }),
+                selectedGroup: {
+                    ...state.selectedGroup,
+                    payment_method: action.paymentMethod
                 }
             };
 

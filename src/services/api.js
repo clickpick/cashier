@@ -86,6 +86,36 @@ class API {
 
         return await post('/vk-user/detach-cashier', { group_id, user_id });
     }
+
+    setPaymentMethod = async (group_id, payment_method) => {
+        if (!group_id) {
+            throw new Error('Bad group id');
+        }
+
+        if (!payment_method && payment_method !== null) {
+            throw new Error('Bad payment method');
+        }
+
+        return await post(`/vk-user/groups/${group_id}/set-payment-method`, { payment_method });
+    };
+
+    getGroupPaymentParams = async (group_id) => {
+        if (!group_id) {
+            throw new Error('Bad group id');
+        }
+
+        const { data: { data } } = await get(`/vk-user/groups/${group_id}/group-payment-params`);
+
+        return data;
+    }
+
+    generateGroupPaymentParams = async (group_id) => {
+        if (!group_id) {
+            throw new Error('Bad group id');
+        }
+
+        return await post(`/vk-user/groups/${group_id}/generate-group-payment-params`);
+    }
 }
 
 export default new API();

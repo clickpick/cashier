@@ -1,5 +1,6 @@
 import * as types from 'constants/types';
 import API from 'services/api';
+import { PAYMENT_GROUP } from 'constants/payment-methods';
 
 const fetchGroupsLoad = () => ({
     type: types.FETCH_GROUPS_LOAD
@@ -52,7 +53,22 @@ const detachCashier = (groupId, cashierId) => ({
     cashierId
 });
 
-const fetchGroups = async (dispatch) => {    
+const setGroupPaymentParams = (groupId, groupPaymentParams) => ({
+    type: types.SET_GROUP_PAYMENT_PARAMS,
+    groupId,
+    groupPaymentParams
+});
+
+const setPaymentMethod = (groupId, paymentMethod) => ({
+    type: types.SET_GROUP_PAYMENT_METHOD,
+    groupId,
+    paymentMethod
+});
+
+/**
+ * Экшены для групп
+ */
+const fetchGroups = async (dispatch) => {
     dispatch(fetchGroupsLoad());
 
     try {
@@ -86,6 +102,9 @@ const fetchAttachGroup = (groupId, accessToken) => async (dispatch) => {
 
 const selectGroup = (group) => (dispatch) => dispatch(setSelectedGroup(group));
 
+/**
+ * Методы для кассиров
+ */
 const fetchCashiers = async (dispatch, getState) => {
     const { user: { selectedGroup } } = getState();
 
@@ -130,4 +149,61 @@ const fetchDetachCashier = (cashierId) => async (dispatch, getState) => {
     } catch (e) {}
 };
 
-export { fetchGroups, fetchAttachGroup, selectGroup, fetchCashiers, fetchAttachCashiers, fetchDetachCashier };
+/**
+ * Методы для получения денег
+ */
+const fetchSetPaymentMethod = (groupId, paymentMethod) => async (dispatch) => {    
+    try {
+        await API.setPaymentMethod(groupId, paymentMethod);
+        dispatch(setPaymentMethod(groupId, paymentMethod));
+    } catch (e) {
+        console.log(e);
+        
+    }
+};
+
+const fetchGroupPaymentParams = () => async (dispatch, getState) => {
+    const { user: { selectedGroup } } = getState();
+
+    if (!selectedGroup) {
+        return;
+    }
+
+    try {
+        const params = await API.getGroupPaymentParams(selectedGroup.id);
+        
+        dispatch(setGroupPaymentParams(selectedGroup.id, params));
+
+        if (params.is_ready && selectedGroup.payment_method !== PAYMENT_GROUP) {
+            await dispatch(fetchSetPaymentMethod(selectedGroup.id, PAYMENT_GROUP));
+        }
+    } catch (e) {
+        if (e.response.status === 404) {            
+            dispatch(setGroupPaymentParams(selectedGroup.id, { is_ready: false }));
+        }
+    }
+};
+
+const fetchGenerateGroupPaymentParams = () => async (dispatch, getState) => {
+    const { user: { selectedGroup } } = getState();
+
+    if (!selectedGroup) {
+        return;
+    }
+
+    try {
+        await API.generateGroupPaymentParams(selectedGroup.id);
+
+        await dispatch(fetchSetPaymentMethod(selectedGroup.id, PAYMENT_GROUP));
+
+        dispatch(setGroupPaymentParams(selectedGroup.id, { is_ready: true }));
+    } catch (e) {
+        dispatch(setGroupPaymentParams(selectedGroup.id, { is_ready: false }));
+    }
+};
+
+export {
+    fetchGroups, fetchAttachGroup, selectGroup,
+    fetchCashiers, fetchAttachCashiers, fetchDetachCashier,
+    fetchSetPaymentMethod, fetchGroupPaymentParams, fetchGenerateGroupPaymentParams
+};

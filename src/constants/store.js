@@ -1,7 +1,7 @@
-import { PAYMENT } from 'constants/views';
+import { SETTINGS } from 'constants/views';
 import { HOME } from 'constants/panels';
 
-export const STORY_STATE = PAYMENT;
+export const STORY_STATE = SETTINGS;
 
 export const PAYMENT_STATE = {
     activePanel: HOME,
@@ -9,7 +9,7 @@ export const PAYMENT_STATE = {
 };
 
 export const SETTINGS_STATE = {
-    activeTab: 'general'
+    activeTab: 'money'
 };
 
 export const USER_STATE = {

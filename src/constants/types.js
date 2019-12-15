@@ -15,5 +15,9 @@ export const FETCH_CASHIERS_ERROR = 'fetch-cashiers-error';
 export const ATTACH_CASHIERS = 'attach-cashiers';
 export const DETACH_CASHIER = 'detach-cashier';
 
+export const FETCH_GROUP_PAYMENT_PARAMS = 'fetch-group-payment-params';
+export const SET_GROUP_PAYMENT_PARAMS = 'set-group-payment-params';
+export const SET_GROUP_PAYMENT_METHOD = 'set-group-payment-method';
+
 export const SET_ACTIVE_ORDER = 'set-active-order';
 export const UPDATE_ACTIVE_ORDER = 'update-active-order';
