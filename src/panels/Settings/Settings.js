@@ -4,8 +4,9 @@ import { string, func } from 'prop-types';
 import './Settings.css';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserSelectedGroup, getCashiers } from 'reducers/user-reducer';
+import { getUserSelectedGroup, getCashiers, getUserError } from 'reducers/user-reducer';
 import {
+    clearUserError,
     fetchCashiers, fetchAttachCashiers, fetchDetachCashier,
     fetchSetPaymentMethod, fetchGroupPaymentParams, fetchGenerateGroupPaymentParams
 } from 'actions/user-actions';
@@ -18,7 +19,8 @@ import { TABS, PAYMENT_GROUP_MESSAGE } from 'constants/settings';
 import {
     Panel, PanelHeader,
     List, Cell, Avatar,
-    Alert, FixedLayout
+    Alert, FixedLayout,
+    Snackbar
 } from '@vkontakte/vkui';
 import Tabs from 'components/Tabs';
 import Loader from 'components/Loader';
@@ -30,14 +32,23 @@ import Message from 'components/Message';
 
 import { ReactComponent as IconTrash } from 'svg/trash.svg';
 import { ReactComponent as IconVk } from 'svg/vk.svg';
+import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
 import { PAYMENT_NOT_ACCEPT, PAYMENT_GROUP, PAYMENT_SERVICE } from 'constants/payment-methods';
+
+const errorStyle = {
+    backgroundColor: 'var(--color-red)'
+};
 
 const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, onTabChange }) => {
     const selectedGroup = useSelector(getUserSelectedGroup);
     const [loading, cashiers] = useSelector(getCashiers);
 
+    const error = useSelector(getUserError);
+
     const dispatch = useDispatch();
+
+    const hideSpinner = useCallback(() => dispatch(clearUserError()), [dispatch]);
 
     /**
      * Методы для группы
@@ -297,6 +308,13 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                     </>}
                 </details>}
 
+            {(error) &&
+                <Snackbar
+                    before={<Avatar size={24} style={errorStyle}><Icon24Cancel fill="#fff" width={14} height={14} /></Avatar>}
+                    children={error}
+                    action="Закрыть"
+                    onActionClick={hideSpinner}
+                    onClose={hideSpinner} />}
         </Panel>
     );
 };

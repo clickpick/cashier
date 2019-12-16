@@ -93,7 +93,7 @@ const fetchGroups = async (dispatch) => {
         
         dispatch(fetchGroupsSuccess(ownedGroups, cashiedGroups));
     } catch (e) {
-        dispatch(fetchGroupsError('laod err'));
+        dispatch(fetchGroupsError('Ошибка получения подключенных групп.'));
     }
 };
 
@@ -105,6 +105,7 @@ const fetchAttachGroup = (groupId, accessToken) => async (dispatch) => {
 
         return true;
     } catch (e) {
+        dispatch(setUserError('У нас не получилось добавить Вашу группу.'));
         return false;
     }
 };
@@ -128,7 +129,7 @@ const fetchCashiers = async (dispatch, getState) => {
 
         dispatch(fetchCashiersSuccess(cashiers));
     } catch (e) {
-        dispatch(fetchCashiersError('cashiers error'));
+        dispatch(fetchCashiersError('Произошла ошибка при попытке получить список сотрудников.'));
     }
 };
 
@@ -143,7 +144,7 @@ const fetchAttachCashiers = (users) => async (dispatch, getState) => {
         const cashiers = await Promise.all(users.map((user) => API.attachCashier(selectedGroup.id, user.id)));
         dispatch(attachCashiers(selectedGroup.id, cashiers));
     } catch(e) {
-        // todo
+        dispatch(setUserError(`У нас не получилось добавить ${(users.length === 1) ? 'Вашего сотрудника' : 'Ваших сотрудников'}.`));
     }
 };
 
@@ -157,7 +158,9 @@ const fetchDetachCashier = (cashierId) => async (dispatch, getState) => {
     try {
         await API.detachCashiers(selectedGroup.id, cashierId);
         dispatch(detachCashier(selectedGroup.id, cashierId));
-    } catch (e) {}
+    } catch (e) {
+        dispatch(setUserError('Произошла ошибка при попытке удаления сотрудника.'));
+    }
 };
 
 /**
@@ -168,7 +171,7 @@ const fetchSetPaymentMethod = (groupId, paymentMethod) => async (dispatch) => {
         await API.setPaymentMethod(groupId, paymentMethod);
         dispatch(setPaymentMethod(groupId, paymentMethod));
     } catch (e) {
-        console.log(e);
+        dispatch(setUserError('Произошла ошибка при попытке поменять способ получения денег.'));
     }
 };
 
@@ -189,10 +192,10 @@ const fetchGroupPaymentParams = () => async (dispatch, getState) => {
         }
     } catch (e) {
         if (e.response.status === 404) {
-            dispatch(setUserError('123'));
-               
-            dispatch(setGroupPaymentParams(selectedGroup.id, { is_ready: false }));
+            return dispatch(setGroupPaymentParams(selectedGroup.id, { is_ready: false }));
         }
+
+        dispatch(setUserError('Произошла ошибка при попытки получить параметры оплаты для группы.'));
     }
 };
 
