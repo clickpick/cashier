@@ -67,6 +67,7 @@ const App = () => {
 
 	useEffect(() => {
 		connect.send('VKWebAppSetViewSettings', { status_bar_style: 'dark', action_bar_color: '#fff' });
+		// connect.send("VKWebAppShowCommunityWidgetPreviewBox", { "group_id": 189331111, "type": "text", "code": "return { \"title\": \"test\", \"text\": \"test\" }; "});
 	}, []);
 
 	return (
