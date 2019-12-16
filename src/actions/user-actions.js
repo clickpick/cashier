@@ -2,6 +2,15 @@ import * as types from 'constants/types';
 import API from 'services/api';
 import { PAYMENT_GROUP } from 'constants/payment-methods';
 
+const setUserError = (error) => ({
+    type: types.SET_USER_ERROR,
+    error
+});
+
+const clearUserError = () => ({
+    type: types.CLEAR_USER_ERROR
+});
+
 const fetchGroupsLoad = () => ({
     type: types.FETCH_GROUPS_LOAD
 });
@@ -83,12 +92,12 @@ const fetchGroups = async (dispatch) => {
         const [{ data: { data: ownedGroups } }, { data: { data: cashiedGroups } }] = responses;
         
         dispatch(fetchGroupsSuccess(ownedGroups, cashiedGroups));
-    } catch (e) {        
+    } catch (e) {
         dispatch(fetchGroupsError('laod err'));
     }
 };
 
-const fetchAttachGroup = (groupId, accessToken) => async (dispatch) => {    
+const fetchAttachGroup = (groupId, accessToken) => async (dispatch) => {
     try {
         const group = await API.attachGroup(groupId, accessToken);
         
@@ -138,7 +147,7 @@ const fetchAttachCashiers = (users) => async (dispatch, getState) => {
     }
 };
 
-const fetchDetachCashier = (cashierId) => async (dispatch, getState) => {    
+const fetchDetachCashier = (cashierId) => async (dispatch, getState) => {
     const { user: { selectedGroup } } = getState();
 
     if (!selectedGroup) {
@@ -154,13 +163,12 @@ const fetchDetachCashier = (cashierId) => async (dispatch, getState) => {
 /**
  * Методы для получения денег
  */
-const fetchSetPaymentMethod = (groupId, paymentMethod) => async (dispatch) => {    
+const fetchSetPaymentMethod = (groupId, paymentMethod) => async (dispatch) => {
     try {
         await API.setPaymentMethod(groupId, paymentMethod);
         dispatch(setPaymentMethod(groupId, paymentMethod));
     } catch (e) {
         console.log(e);
-        
     }
 };
 
@@ -180,7 +188,9 @@ const fetchGroupPaymentParams = () => async (dispatch, getState) => {
             await dispatch(fetchSetPaymentMethod(selectedGroup.id, PAYMENT_GROUP));
         }
     } catch (e) {
-        if (e.response.status === 404) {            
+        if (e.response.status === 404) {
+            dispatch(setUserError('123'));
+               
             dispatch(setGroupPaymentParams(selectedGroup.id, { is_ready: false }));
         }
     }
@@ -205,6 +215,7 @@ const fetchGenerateGroupPaymentParams = () => async (dispatch, getState) => {
 };
 
 export {
+    clearUserError,
     fetchGroups, fetchAttachGroup, selectGroup,
     fetchCashiers, fetchAttachCashiers, fetchDetachCashier,
     fetchSetPaymentMethod, fetchGroupPaymentParams, fetchGenerateGroupPaymentParams

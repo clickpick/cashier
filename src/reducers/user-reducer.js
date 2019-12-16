@@ -14,6 +14,18 @@ function updateCashiers(group) {
 
 export function userReducer(state = USER_STATE, action) {
     switch (action.type) {
+        case types.SET_USER_ERROR:
+            return {
+                ...state,
+                error: action.error
+            };
+
+        case types.CLEAR_USER_ERROR:
+            return {
+                ...state,
+                error: false
+            };
+
         case types.FETCH_GROUPS_LOAD: case types.FETCH_CASHIERS_LOAD:
             return {
                 ...state,
@@ -153,6 +165,8 @@ export function userReducer(state = USER_STATE, action) {
 
 export const getUserState = (state) => state.user;
 export const getUserLoading = (state) => state.user.loading;
+export const getUserError = (state) => state.user.error;
+
 export const getUserGroups = (state) => {
     const { ownedGroups, cashiedGroups } = state.user;
 
