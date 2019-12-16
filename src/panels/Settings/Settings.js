@@ -13,7 +13,7 @@ import {
 import connect from '@vkontakte/vk-connect';
 
 import { STATUS_ACCEPTED, STATUS_DECLINED } from 'constants/group-statuses';
-import { TABS } from 'constants/settings';
+import { TABS, PAYMENT_GROUP_MESSAGE } from 'constants/settings';
 
 import {
     Panel, PanelHeader,
@@ -279,7 +279,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                             className="Settings__Message"
                             theme="gray"
                             size="small"
-                            children="Мы не призываем вас использовать переводы на физическое лицо, всё на свой страх и риск." />}
+                            children={PAYMENT_GROUP_MESSAGE} />}
 
                     {(!paymentMethodNotAllowed && selectedGroup.groupPaymentParams) && <>
                         {(selectedGroup.groupPaymentParams.is_ready)
