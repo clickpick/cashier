@@ -51,8 +51,6 @@ export function userReducer(state = USER_STATE, action) {
             };
 
         case types.ATTACH_OWNED_GROUP:
-            console.log(action);
-
             const newOwnedGroups = {
                 ...action.entities,
                 owned: true,
