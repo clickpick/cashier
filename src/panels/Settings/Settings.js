@@ -18,7 +18,8 @@ import { TABS, PAYMENT_GROUP_MESSAGE } from 'constants/settings';
 import {
     Panel, PanelHeader,
     List, Cell, Avatar,
-    Alert, FixedLayout } from '@vkontakte/vkui';
+    Alert, FixedLayout
+} from '@vkontakte/vkui';
 import Tabs from 'components/Tabs';
 import Loader from 'components/Loader';
 import ShopCard from 'components/ShopCard';
@@ -149,7 +150,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
         toggleSpinnerPopup();
     }, [selectedGroup, toggleSpinnerPopup, dispatch]);
 
-    const handlePaymentMethodChange = useCallback((e) => {        
+    const handlePaymentMethodChange = useCallback((e) => {
         if (e.target.value === '' && !paymentMethodNotAllowed) {            
             return setPaymentMethod(PAYMENT_NOT_ACCEPT);
         }
@@ -281,7 +282,8 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                             size="small"
                             children={PAYMENT_GROUP_MESSAGE} />}
 
-                    {(!paymentMethodNotAllowed && selectedGroup.groupPaymentParams) && <>
+                    
+                    {(selectedGroup.groupPaymentParams) && <>
                         {(selectedGroup.groupPaymentParams.is_ready)
                             ? <p className="Settings__status" children="Статус: Всё готово." />
                             : <>
