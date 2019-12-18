@@ -278,7 +278,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                             onChange={handlePaymentMethodChange}
                             children="Принимать как физ. лицо" />
                         <Cell
-                            className="Settings__Cell  Settings__Cell--selectable"
+                            className="Settings__Cell  Settings__Cell--selectable  Settings__Cell--disabled"
                             selectable
                             checked={paymentMethodService}
                             value={PAYMENT_SERVICE}

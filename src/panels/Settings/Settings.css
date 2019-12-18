@@ -49,6 +49,10 @@
     box-sizing: border-box;
 }
 
+.Settings__Cell--disabled {
+    opacity: 0.4;
+}
+
 .Settings__status {
     padding: 10px 20px;
 }
