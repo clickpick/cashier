@@ -7,6 +7,8 @@ import connect from '@vkontakte/vk-connect';
 
 import '@vkontakte/vkui/dist/vkui.css';
 
+import * as Sentry from '@sentry/browser';
+
 import Echo from 'laravel-echo';
 import io from 'socket.io-client';
 import { parseQueryString } from 'helpers/location';
@@ -18,6 +20,10 @@ import { INITIAL_STATE } from 'constants/store';
 
 import App from './App';
 // import registerServiceWorker from './sw';
+
+if (process.env.NODE_ENV !== 'development') {
+    Sentry.init({ dsn: process.env.REACT_APP_SENTRY_DNS });
+}
 
 // Init VK  Mini App
 connect.send('VKWebAppInit');
