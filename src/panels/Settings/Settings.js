@@ -125,8 +125,8 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
 
             toggleSpinnerPopup();
             await dispatch(fetchAttachCashiers(users));
+            toggleSpinnerPopup();
         } catch (e) {}
-        toggleSpinnerPopup();
     }, [dispatch, toggleSpinnerPopup]);
 
     useEffect(() => {
