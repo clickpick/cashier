@@ -226,8 +226,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                         target="_blank"
                         children="Написать разработчику"
                         before={<IconVk />}
-                        full
-                        backlight />
+                        full />
                 </FixedLayout>
             </details>
 
@@ -254,8 +253,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                         children="Добавить сотрудника"
                         before={<IconVk />}
                         onClick={attachCashiers}
-                        full
-                        backlight />
+                        full />
                 </FixedLayout>
             </details>
 
@@ -283,7 +281,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                             checked={paymentMethodService}
                             value={PAYMENT_SERVICE}
                             onChange={handlePaymentMethodChange}
-                            children="Принимать как юр. лицо" />
+                            children="Принимать как юр. лицо (скоро)" />
                     </List>
 
                     {(paymentMethodGroup) &&
