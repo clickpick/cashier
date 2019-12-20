@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { string, oneOf, arrayOf, shape, bool, func } from 'prop-types';
 import classNames from 'classnames';
 
@@ -9,13 +9,10 @@ import Button from 'components/Button';
 import { useSwipeable, UP, DOWN } from 'react-swipeable';
 import useLockBody from 'hooks/use-lock-body';
 
-const Dialog = ({ className, disabled, onClose, animationType, type, title, message, children: initialChildren, actions }) => {
+const Dialog = ({ className, disabled, onClose, animationType, type, title, message, children, actions }) => {
     useLockBody(true);
 
     const wrapperRef = useRef();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const children = useMemo(() => initialChildren, []);
 
     const [bottom, setBottom] = useState(0);
     const [hasScroll, setHasScroll] = useState(false);
