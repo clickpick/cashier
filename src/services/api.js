@@ -18,6 +18,7 @@ const instance = axios.create({
 
 const get = (urn) => instance.get(urn);
 const post = (urn, body) => instance.post(urn, body);
+const put = (urn, body) => instance.put(urn, body);
 
 class API {
     getOwnedGroups = async () => await get('/vk-user/owned-groups');
@@ -87,6 +88,28 @@ class API {
         return await post('/vk-user/detach-cashier', { group_id, user_id });
     }
 
+    getGroupAddresses = async (groupId) => {
+        if (!groupId) {
+            throw new Error('Bad group id');
+        }
+
+        const { data: { data } } = await get(`vk-user/groups/${groupId}/addresses`);
+
+        return data;
+    }
+
+    updateGroupAddress = async (addressId, album_id) => {
+        if (!addressId) {
+            throw new Error('Bad address id');
+        }
+
+        if (!album_id) {
+            throw new Error('Bad album id');
+        }
+
+        return await put(`/vk-user/addresses/${addressId}`, { album_id });
+    }
+
     setPaymentMethod = async (group_id, payment_method) => {
         if (!group_id) {
             throw new Error('Bad group id');
@@ -115,6 +138,16 @@ class API {
         }
 
         return await post(`/vk-user/groups/${group_id}/generate-group-payment-params`);
+    }
+
+    async callAPI(method, params) {
+        if (!method) {
+            throw new Error('Bad method');
+        }
+
+        const response = await post('/vk-user/call-api', { method, params });
+
+        return response.data;
     }
 }
 

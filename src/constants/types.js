@@ -11,6 +11,13 @@ export const FETCH_GROUPS_LOAD = 'fetch-groups-load';
 export const FETCH_GROUPS_SUCCESS = 'fetch-groups-success';
 export const FETCH_GROUPS_ERROR = 'fetch-groups-error';
 export const ATTACH_OWNED_GROUP = 'attach-owned-group';
+
+export const FETCH_ADDRESSES_LOAD = 'fetch-addresses-load';
+export const FETCH_ADDRESSES_SUCCESS = 'fetch-addresses-success';
+export const FETCH_ADDRESSES_ERROR = 'fetch-addresses-error';
+
+export const UPDATE_ADDRESS = 'update-address';
+
 export const SET_SELECTED_GROUP = 'set-selected-group';
 export const FETCH_CASHIERS_LOAD = 'fetch-cashiers-load';
 export const FETCH_CASHIERS_SUCCESS = 'fetch-cashiers-success';

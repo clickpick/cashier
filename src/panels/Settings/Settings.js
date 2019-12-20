@@ -1,13 +1,14 @@
-import React, { useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { string, func } from 'prop-types';
 
 import './Settings.css';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserSelectedGroup, getCashiers, getUserError } from 'reducers/user-reducer';
+import { getUserSelectedGroup, getAddresses, getAlbums, getCashiers, getUserError } from 'reducers/user-reducer';
 import {
     clearUserError,
     fetchCashiers, fetchAttachCashiers, fetchDetachCashier,
+    fetchAddresses, fetchUpdateAddress,
     fetchSetPaymentMethod, fetchGroupPaymentParams, fetchGenerateGroupPaymentParams
 } from 'actions/user-actions';
 
@@ -20,7 +21,7 @@ import {
     Panel, PanelHeader,
     List, Cell, Avatar,
     Alert, FixedLayout,
-    Snackbar
+    Group, Snackbar
 } from '@vkontakte/vkui';
 import Tabs from 'components/Tabs';
 import Loader from 'components/Loader';
@@ -29,10 +30,13 @@ import Tag from 'components/Tag';
 import Title from 'components/Title';
 import Button from 'components/Button';
 import Message from 'components/Message';
+import PopupContainer from 'components/PopupContainer';
+import Popup from 'components/Popup';
 
 import { ReactComponent as IconTrash } from 'svg/trash.svg';
 import { ReactComponent as IconVk } from 'svg/vk.svg';
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
+import Icon24Done from '@vkontakte/icons/dist/24/done';
 
 import { PAYMENT_NOT_ACCEPT, PAYMENT_GROUP, PAYMENT_SERVICE } from 'constants/payment-methods';
 
@@ -42,7 +46,9 @@ const errorStyle = {
 
 const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, onTabChange }) => {
     const selectedGroup = useSelector(getUserSelectedGroup);
-    const [loading, cashiers] = useSelector(getCashiers);
+    const [loadingAddresses, addresses] = useSelector(getAddresses);
+    const [loadingAlbums, albums] = useSelector(getAlbums);
+    const [loadingCashiers, cashiers] = useSelector(getCashiers);
 
     const error = useSelector(getUserError);
 
@@ -53,6 +59,19 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
     /**
      * Методы для группы
      */
+    const [showSetAlbum, setShowSetAlbum] = useState(false);
+    const [address, setAddress] = useState(null);
+
+    const openSetAlbum = useCallback((address) => {
+        setAddress(address);
+        setShowSetAlbum(true);
+    }, []);
+
+    const closeSetAlbum = useCallback(() => {
+        setAddress(null);
+        setShowSetAlbum(false);
+    }, []);
+
     const tag = useMemo(() => {
         if (selectedGroup) {
             let props = { children: 'На рассмотрении' };
@@ -69,7 +88,42 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
         }
 
         return undefined;
-    }, [selectedGroup])
+    }, [selectedGroup]);
+
+    const renderAddress = useCallback((address, index) =>
+        <Cell
+            key={index}
+            className="Settings__address"
+            before={<Avatar src={address.thumb} size={28} />}
+            children={address.address}
+            description={address.title}
+            onClick={() => openSetAlbum(address)} />, [openSetAlbum]);
+
+    const setAlbum = useCallback((album) => {
+        dispatch(fetchUpdateAddress({
+            ...address,
+            album_id: album.id,
+            thumb: album.thumb_src
+        }));
+        closeSetAlbum();
+    }, [address, closeSetAlbum, dispatch]);
+
+    const renderAlbum = useCallback((album, index) =>
+        <Cell
+            key={index}
+            className="Settings__address"
+            before={<Avatar src={album.thumb_src} size={28} />}
+            children={album.title}
+            description={album.description}
+            asideContent={(address.album_id === album.id) ? <Icon24Done className="Settings__Icon24Done" /> : undefined}
+            data-album-id={album.id}
+            onClick={() => setAlbum(album)} />, [address, setAlbum]);
+
+    useEffect(() => {
+        if (!loadingAddresses && addresses === null && activeTab === 'general') {
+            dispatch(fetchAddresses);
+        }
+    }, [activeTab, loadingAddresses, addresses, dispatch]);
 
     /**
      * Методы для сотрудников
@@ -130,10 +184,10 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
     }, [dispatch, toggleSpinnerPopup]);
 
     useEffect(() => {
-        if (!loading && cashiers === null && activeTab === 'cashiers') {            
+        if (!loadingCashiers && cashiers === null && activeTab === 'cashiers') {
             dispatch(fetchCashiers);
         }
-    }, [activeTab, loading, cashiers, dispatch]);
+    }, [activeTab, loadingCashiers, cashiers, dispatch]);
 
     /**
      * Методы для настройки получения денег
@@ -215,6 +269,20 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                     {(selectedGroup.status === STATUS_DECLINED) &&
                         <Title children="Заведение отклонено" />}
                 </>}
+
+                <Group className="Settings__addresses" title="Фотографии филиалов">
+                    {(loadingAddresses || loadingAlbums) && <Loader center />}
+
+                    {(Array.isArray(addresses)) ?
+                        (addresses.length === 0)
+                            ? <Title children="А адресов то нет" hint="Настрой всё в группе" />
+                            : (Array.isArray(albums) && albums.length === 0)
+                                ? <Title children="А фотографий то нет" hint="Настрой всё в группе" />
+                                : addresses.map(renderAddress)
+                        : null}
+                        
+                </Group>
+
                 <FixedLayout
                     className="Settings__FixedLayout"
                     vertical="bottom">
@@ -233,7 +301,7 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
             <details className="Settings__details" open={activeTab === 'cashiers'}>
                 <summary />
                 
-                {(loading) && <Loader center />}
+                {(loadingCashiers) && <Loader center />}
 
                 {(Array.isArray(cashiers)) &&
                     (cashiers.length > 0)
@@ -313,6 +381,15 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                     action="Закрыть"
                     onActionClick={hideSpinner}
                     onClose={hideSpinner} />}
+
+            <PopupContainer>
+                <Popup visible={showSetAlbum} onClose={closeSetAlbum}>
+                    {(address) && <>
+                        <Title children={`Фотографии для "${address.address}"`} />
+                        {albums.map(renderAlbum)}
+                    </>}
+                </Popup>
+            </PopupContainer>
         </Panel>
     );
 };

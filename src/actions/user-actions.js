@@ -62,6 +62,21 @@ const detachCashier = (groupId, cashierId) => ({
     cashierId
 });
 
+const fetchAddressesLoad = () => ({
+    type: types.FETCH_ADDRESSES_LOAD
+});
+
+const fetchAddressesSuccess = (addresses, albums) => ({
+    type: types.FETCH_ADDRESSES_SUCCESS,
+    addresses,
+    albums
+});
+
+const updateAddress = (address) => ({
+    type: types.UPDATE_ADDRESS,
+    address
+});
+
 const setGroupPaymentParams = (groupId, groupPaymentParams) => ({
     type: types.SET_GROUP_PAYMENT_PARAMS,
     groupId,
@@ -164,6 +179,66 @@ const fetchDetachCashier = (cashierId) => async (dispatch, getState) => {
 };
 
 /**
+ * Методы для точек
+ */
+const fetchAddresses = async (dispatch, getState) => {
+    const { user: { selectedGroup } } = getState();
+
+    if (!selectedGroup) {
+        return;
+    }
+
+    function findAlbum(album) {
+        return album.id === this.album_id;
+    }
+
+    dispatch(fetchAddressesLoad());
+
+    try {
+        let addresses = await API.getGroupAddresses(selectedGroup.id);
+
+        let albums = [];
+        try {
+            const { response: { items } } = await API.callAPI('photos.getAlbums', {
+                owner_id: `-${selectedGroup.id}`,
+                need_covers: true
+            });
+
+            albums = items;
+        } catch (e) {}
+
+        if (albums.length > 0) {
+            addresses = addresses.map((address) => {
+                if (address.album_id) {
+                    const album = albums.find(findAlbum, address);
+
+                    if (album) {
+                        return {
+                            ...address,
+                            thumb: album.thumb_src
+                        };
+                    }
+                }
+
+                return address;
+            });
+        }
+
+        dispatch(fetchAddressesSuccess(addresses, albums));
+    } catch (e) {
+        // dispatch(fetchAddressesError('Произошла ошибка при попытке получить список сотрудников.'));
+    }
+};
+
+const fetchUpdateAddress = (address) => async (dispatch) => {
+    dispatch(updateAddress(address));
+
+    try {
+        await API.updateGroupAddress(address.id, address.album_id);
+    } catch (e) {}
+};
+ 
+/**
  * Методы для получения денег
  */
 const fetchSetPaymentMethod = (groupId, paymentMethod) => async (dispatch) => {
@@ -221,5 +296,6 @@ export {
     clearUserError,
     fetchGroups, fetchAttachGroup, selectGroup,
     fetchCashiers, fetchAttachCashiers, fetchDetachCashier,
+    fetchAddresses, fetchUpdateAddress,
     fetchSetPaymentMethod, fetchGroupPaymentParams, fetchGenerateGroupPaymentParams
 };

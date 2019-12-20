@@ -16,6 +16,11 @@
     padding-left: 40px;
 }
 
+.Settings__Icon24Done {
+    color: var(--color-gray);
+}
+
+.Settings__addresses,
 .Settings__cashiers {
     padding-bottom: 126px;
 }

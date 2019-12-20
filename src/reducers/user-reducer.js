@@ -12,6 +12,17 @@ function updateCashiers(group) {
     return group;
 }
 
+function updateAddress(address) {
+    if (address.id === this.id) {
+        return {
+            ...address,
+            ...this
+        };
+    }
+
+    return address;
+}
+
 export function userReducer(state = USER_STATE, action) {
     switch (action.type) {
         case types.SET_USER_ERROR:
@@ -26,30 +37,29 @@ export function userReducer(state = USER_STATE, action) {
                 error: false
             };
 
-        case types.FETCH_GROUPS_LOAD: case types.FETCH_CASHIERS_LOAD:
+        case types.FETCH_GROUPS_LOAD: case types.FETCH_CASHIERS_LOAD: case types.FETCH_ADDRESSES_LOAD:
             return {
                 ...state,
                 loading: true
             };
 
         case types.FETCH_GROUPS_SUCCESS:
+            const ownedGroups = action.ownedGroups.map((group) => ({
+                ...group,
+                owned: true,
+                cashiers: null,
+                addresses: null,
+                albums: null,
+                groupPaymentParams: null
+            }));
+
             return {
                 ...state,
                 loading: false,
-                ownedGroups: action.ownedGroups.map((group) => ({
-                    ...group,
-                    owned: true,
-                    cashiers: null,
-                    groupPaymentParams: null
-                })),
+                ownedGroups,
                 cashiedGroups: action.cashiedGroups.map((group) => ({ ...group, owned: false })),
                 selectedGroup: (action.ownedGroups.length > 0)
-                    ? {
-                        ...action.ownedGroups[0],
-                        owned: true,
-                        cashiers: null,
-                        groupPaymentParams: null
-                    }
+                    ? ownedGroups[0]
                     : (action.cashiedGroups.length > 0)
                         ? { ...action.cashiedGroups[0], owned: false }
                         : null
@@ -120,6 +130,26 @@ export function userReducer(state = USER_STATE, action) {
                 }
             };
 
+        case types.FETCH_ADDRESSES_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                selectedGroup: {
+                    ...state.selectedGroup,
+                    addresses: action.addresses,
+                    albums: action.albums
+                }
+            };
+
+        case types.UPDATE_ADDRESS:
+            return {
+                ...state,
+                selectedGroup: {
+                    ...state.selectedGroup,
+                    addresses: state.selectedGroup.addresses.map(updateAddress, action.address)
+                }
+            };
+
         case types.SET_GROUP_PAYMENT_PARAMS:
             return {
                 ...state,
@@ -187,3 +217,22 @@ export const getCashiers = (state) => {
 
     return [false, []];
 };
+export const getAddresses = (state) => {
+    const selectedGroups = getUserSelectedGroup(state);
+    
+    if (selectedGroups) {
+        return [getUserLoading(state), selectedGroups.addresses];
+    }
+
+    return [false, null];
+};
+
+export const getAlbums = (state) => {
+    const selectedGroups = getUserSelectedGroup(state);
+
+    if (selectedGroups) {
+        return [getUserLoading(state), selectedGroups.albums];
+    }
+
+    return [false, null];
+}
