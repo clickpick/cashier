@@ -275,9 +275,9 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
 
                     {(Array.isArray(addresses)) ?
                         (addresses.length === 0)
-                            ? <Title children="А адресов то нет" hint="Настрой всё в группе" />
+                            ? <Title children="Адреса отсутствуют" hint="Добавьте адреса в настройках группы" />
                             : (Array.isArray(albums) && albums.length === 0)
-                                ? <Title children="А фотографий то нет" hint="Настрой всё в группе" />
+                                ? <Title children="Доступных альбомов нет" hint="Добавьте хотя бы один альюлм в группу" />
                                 : addresses.map(renderAddress)
                         : null}
                         
@@ -303,13 +303,14 @@ const Settings = ({ id, activeTab, toggleSpinnerPopup, openPopout, closePopout, 
                 
                 {(loadingCashiers) && <Loader center />}
 
-                {(Array.isArray(cashiers)) &&
-                    (cashiers.length > 0)
+                {(Array.isArray(cashiers))
+                    ? (cashiers.length > 0)
                         ? <div className="Settings__cashiers" children={cashiers.map(renderCashier)} />
                         : <Title
                             className="Settings__Title"
                             children="Сотрудники отсутствуют"
-                            hint="Добавьте новых сотрудников" />}
+                            hint="Добавьте новых сотрудников" />
+                        : null}
 
                 <FixedLayout
                     className="Settings__FixedLayout"
