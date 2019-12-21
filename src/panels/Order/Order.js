@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { string, func } from 'prop-types';
 
 import './Order.css';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getActiveOrder } from 'reducers/active-order-reducer';
-import { updateActiveOrder } from 'actions/active-order-actions';
+import { updateActiveOrder, fetchOrder } from 'actions/active-order-actions';
 
 import { Panel, PanelHeader, PanelHeaderBack, FixedLayout } from '@vkontakte/vkui';
 
@@ -25,7 +25,11 @@ const Order = ({ id, back }) => {
 
     const dispatch = useDispatch();
 
-    useEffect(() => {        
+    const updateOrder = useCallback(() => {
+        dispatch(fetchOrder(activeOrder.id));
+    }, [activeOrder.id, dispatch]);
+
+    useEffect(() => {
         window.Echo
             .private(`order.${activeOrder.id}`)
             .listen('OrderUpdated', ({ order }) => {
@@ -52,6 +56,16 @@ const Order = ({ id, back }) => {
                     <QR
                         className="Order__QR"
                         value={`https://vk.com/app${VK_MAIN_APP_ID}#order=${activeOrder.id}`} />
+
+                    <FixedLayout className="Order__FixedLayout" vertical="bottom">
+                        <Button
+                            className="Order__Button"
+                            theme="primary"
+                            size="medium"
+                            children="Обновить статус оплаты"
+                            full
+                            onClick={updateOrder} />
+                    </FixedLayout>
                 </>}
 
                 {(activeOrder.status === PAID) && <>
@@ -61,9 +75,7 @@ const Order = ({ id, back }) => {
                         children={`${gaps(activeOrder.value)} ₽ оплачено`} />
                     <Success className="Order__Success" />
 
-                    <FixedLayout
-                        className="Order__FixedLayout"
-                        vertical="bottom">
+                    <FixedLayout className="Order__FixedLayout" vertical="bottom">
                         <Button
                             className="Order__Button"
                             theme="primary"

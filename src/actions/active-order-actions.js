@@ -24,4 +24,16 @@ const fetchMakeOrder = (groupId, value) => async (dispatch) => {
     }
 };
 
-export { fetchMakeOrder, updateActiveOrder };
+const fetchOrder = (orderId) => async (dispatch) => {
+    try {
+        const order = await API.getOrder(orderId);
+
+        dispatch(setActiveOrder(order));
+
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+export { fetchMakeOrder, fetchOrder, updateActiveOrder };

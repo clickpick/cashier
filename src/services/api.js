@@ -9,7 +9,7 @@ const instance = axios.create({
     headers: {
         'Vk-Params': window.btoa(JSON.stringify({
             ...parseQueryString(window.location.search),
-            auth_type: 'front',
+            auth_type: 'back',
             utc_offset: getTimezoneOffset()
         })),
         'Accept': 'application/json'
@@ -48,6 +48,16 @@ class API {
         }
 
         const { data: { data } } = await post('/vk-user/make-order', { group_id, value });
+
+        return data;
+    }
+
+    async getOrder(orderId) {
+        if (!orderId) {
+            throw new Error('Bad order id');
+        }
+
+        const { data: { data } } = await get(`/vk-user/orders/${orderId}`);
 
         return data;
     }
