@@ -40,11 +40,9 @@ const Input = ({ className, name, top, placeholder, value: initialValue, maxLeng
         };
     
         if (value !== '') {
-            let direction = 'DOWN';
             buffer.current.innerHTML = value;
 
             const fontSize = buffer.current.style.fontSize;
-            
             let size = Number(fontSize.substring(0, fontSize.length - 2)) || MAX_FONT_SIZE;
             
             if (getMaxWidth() < getBufferWidth()) {                
@@ -53,8 +51,6 @@ const Input = ({ className, name, top, placeholder, value: initialValue, maxLeng
                     setStyleProperty(postfix.current, 'fontSize', `${size}px`);
                 }
             } else if (size < MAX_FONT_SIZE) {
-                direction = 'UP';
-
                 while (getBufferWidth() < getMaxWidth() && size < MAX_FONT_SIZE) {
                     setStyleProperty(postfix.current, 'fontSize', `${++size}px`);
                     setStyleProperty(buffer.current, 'fontSize', `${size}px`);
@@ -64,9 +60,7 @@ const Input = ({ className, name, top, placeholder, value: initialValue, maxLeng
             setStyleProperty(
                 input.current,
                 'width',
-                (direction === 'DOWN')
-                    ? `${getBufferWidth()}px`
-                    : `${getBufferWidth() - 50}px`
+                `${getBufferWidth()}px`
             );
             setStyleProperty(input.current, 'fontSize', `${size}px`);
         }
