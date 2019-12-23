@@ -37,7 +37,7 @@ window.Echo = new Echo({
         headers: {
             'Vk-Params': window.btoa(JSON.stringify({
                 ...parseQueryString(window.location.search),
-                auth_type: 'front',
+                auth_type: 'back',
                 utc_offset: getTimezoneOffset()
             })),
         }
