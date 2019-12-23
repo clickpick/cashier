@@ -159,6 +159,11 @@ const fetchAttachCashiers = (users) => async (dispatch, getState) => {
         const cashiers = await Promise.all(users.map((user) => API.attachCashier(selectedGroup.id, user.id)));
         dispatch(attachCashiers(selectedGroup.id, cashiers));
     } catch(e) {
+        if (e.response.status === 400) {
+            dispatch(setUserError(e.response.data.message));
+            return;
+        }
+        
         dispatch(setUserError(`У нас не получилось добавить ${(users.length === 1) ? 'Вашего сотрудника' : 'Ваших сотрудников'}.`));
     }
 };
